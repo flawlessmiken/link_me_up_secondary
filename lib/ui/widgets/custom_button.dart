@@ -21,44 +21,48 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      style: TextButton.styleFrom(
-        backgroundColor: onPressed == null
-            ? disabledColor ?? Theme.of(context).primaryColor.withOpacity(.6)
-            : backgroundColor ?? Theme.of(context).primaryColor,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-              color: onPressed == null
-                  ? disabledColor ??
-                      Theme.of(context).primaryColor.withOpacity(.1)
-                  : borderColor ?? Theme.of(context).primaryColor,
-              width: 1.5),
-          borderRadius: BorderRadius.all(
-            Radius.circular(30),
+    return Container(
+      height: 50,
+      child: TextButton(
+        
+        style: TextButton.styleFrom(
+          backgroundColor: onPressed == null
+              ? disabledColor ?? Theme.of(context).primaryColor.withOpacity(.6)
+              : backgroundColor ?? Theme.of(context).primaryColor,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+                color: onPressed == null
+                    ? disabledColor ??
+                        Theme.of(context).primaryColor.withOpacity(.1)
+                    : borderColor ?? Theme.of(context).primaryColor,
+                width: 1.5),
+            borderRadius: BorderRadius.all(
+              Radius.circular(30),
+            ),
           ),
         ),
-      ),
-      onPressed: onPressed,
-      child: Padding(
-        padding: EdgeInsets.all(2.0),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            leading ?? Container(),
-            leading == null
-                ? Container()
-                : SizedBox(
-                    width: 20,
-                  ),
-            Text(
-              text!,
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-                color: textColor,
+        onPressed: onPressed,
+        child: Padding(
+          padding: EdgeInsets.all(2.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              leading ?? Container(),
+              leading == null
+                  ? Container()
+                  : SizedBox(
+                      width: 20,
+                    ),
+              Text(
+                text!,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: textColor,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

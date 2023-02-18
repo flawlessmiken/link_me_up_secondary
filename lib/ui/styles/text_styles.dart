@@ -46,7 +46,7 @@ var txStyle13 = const TextStyle(fontSize: 13, color: Colors.black);
 var txStyle13Bold = const TextStyle(
     fontSize: 13, fontWeight: FontWeight.bold, color: Colors.black);
 
-var txStyle14 = const TextStyle(fontSize: 14, color: Colors.black);
+const  txStyle14 = const TextStyle(fontSize: 14, color: Colors.black);
 
 var txStyle14Bold = const TextStyle(
     fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black);

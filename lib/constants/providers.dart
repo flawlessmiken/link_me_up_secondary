@@ -1,6 +1,7 @@
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+import '../api/core/repositories/auth_repository.dart';
 import '../home_viewmodel.dart';
 
 class AppProviders {
@@ -9,6 +10,8 @@ class AppProviders {
   static final providers = <SingleChildWidget>[
     //format for registering providers:
     ListenableProvider(create: (_) => HomeViewmodel()),
+    ListenableProvider(create: (_) => AuthRepository()),
+
   ];
 }
 

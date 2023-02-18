@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
 
 import '../../../constants/route_names.dart';
 import '../../size_config/size_config.dart';
@@ -41,12 +42,8 @@ class _StartScreenState extends State<StartScreen> {
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   )),
-              const Text('...your personal identity',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  )),
+               Text('...your personal identity',
+                  style: txStyle15wt),
               const Spacer(),
               ///// Custom Button /////
               Row(
@@ -55,7 +52,7 @@ class _StartScreenState extends State<StartScreen> {
                     child: CustomButton(
                       onPressed: () async {
                         Navigator.pushNamed(
-                            context, RouteNames.phoneNumberScreen);
+                            context, RouteNames.loginSignUpScreen);
                       },
                       textColor: Colors.white,
                       text: 'Get Started',

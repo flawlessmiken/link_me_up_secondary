@@ -6,6 +6,8 @@ import 'package:link_me_up_secondary/ui/size_config/size_config.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
 import 'package:link_me_up_secondary/ui/widgets/custom_button.dart';
 
+import '../../../constants/route_names.dart';
+
 class SplashScreen extends StatefulWidget {
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -82,7 +84,10 @@ class _SplashScreenState extends State<SplashScreen> {
                             backgroundColor: Colors.white,
                             text: 'Get started',
                             textColor: Theme.of(context).primaryColor,
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, RouteNames.loginSignUpScreen);
+                            },
                           ),
                         ),
                       ],

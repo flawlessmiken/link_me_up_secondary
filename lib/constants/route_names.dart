@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:link_me_up_secondary/ui/screen/authentication/login_screen.dart';
+import 'package:link_me_up_secondary/ui/screen/start_screen/login_signup_screen.dart';
 
 import '../ui/screen/start_screen/splashScreen.dart';
 import '../ui/screen/start_screen/start_screen.dart';
@@ -9,6 +11,9 @@ class RouteNames {
   /// static const String splashScreen = '/splashScreen';
 
   static const String startScreen = 'startScreen';
+  static const String loginSignUpScreen = 'loginSignUpScreen';
+  static const String loginScreen = 'loginScreen';
+
   static const String phoneNumberScreen = 'phoneNumberScreen';
   static const String verifyScreen = 'verifyScreen';
   static const String splashScreen = 'splashScreen';
@@ -65,7 +70,11 @@ class RouteNames {
   static Map<String, Widget Function(BuildContext)> routes = {
     ///Named routes to be added here in this format
     RouteNames.splashScreen: (context) => SplashScreen(),
-    // startScreen: (context) => StartScreen(),
+    startScreen: (context) => StartScreen(),
+    loginSignUpScreen: (context) => LoginSignUpScreen(),
+    loginScreen: (context) => LoginScreen(),
+
+
     // phoneNumberScreen: (context) => PhoneNumberScreen(),
     // verifyScreen: (context) => VerificationScreen(),
     // splashScreen: (context) => SplashScreen(),
@@ -128,9 +137,11 @@ class RouteNames {
       // Add your screen here as well as the transition you want
       case startScreen:
         return MaterialPageRoute(builder: (context) => StartScreen());
+      case loginSignUpScreen:
+        return MaterialPageRoute(builder: (context) => LoginSignUpScreen());
 
-      // case phoneNumberScreen:
-      //   return MaterialPageRoute(builder: (context) => PhoneNumberScreen());
+      case loginScreen:
+        return MaterialPageRoute(builder: (context) => LoginScreen());
 
       // case verifyScreen:
       //   return MaterialPageRoute(builder: (context) => VerificationScreen());
