@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:link_me_up_secondary/constants/colors.dart';
 import 'package:link_me_up_secondary/ui/screen/authentication/signup/userpin_screen.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
 import 'package:phone_form_field/phone_form_field.dart';
@@ -65,87 +66,118 @@ class _AdminRegistrationState extends State<AdminRegistration> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    Stack(
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            FilePickerResult? result =
+                                await FilePicker.platform.pickFiles();
+                            if (result != null) {
+                              file = File(result.files.single.path!);
+                              _filePath = result.files.single.path;
+
+                              setState(() {});
+                            } else {
+                              // User canceled the picker
+                            }
+                          },
+                          child: Container(
+                            height: 74,
+                            width: 74,
+                            decoration: BoxDecoration(
+                              color: Colors.lightBlue.shade100,
+                              shape: BoxShape.circle,
+                              // image: DecorationImage(image: AssetImage('assets/images/profilepics.png',),fit: BoxFit.scaleDown )
+                            ),
+                            child: Center(
+                                child: file == null
+                                    ? Image.asset(
+                                        'assets/images/profilepics.png',
+                                        height: 30,
+                                        width: 30,
+                                      )
+                                    : Container(
+                                        height: 100,
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                            color: Colors.lightBlue.shade100,
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                image: FileImage(
+                                                  file!,
+                                                ),
+                                                fit: BoxFit.cover)),
+                                      )),
+                          ),
+                        ),
+                        Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: InkWell(
+                              onTap: () async {
+                                FilePickerResult? result =
+                                    await FilePicker.platform.pickFiles();
+                                if (result != null) {
+                                  file = File(result.files.single.path!);
+                                  _filePath = result.files.single.path;
+
+                                  setState(() {});
+                                } else {
+                                  // User canceled the picker
+                                }
+                              },
+                              child: Container(
+                                  height: 20,
+                                  width: 20,
+                                  decoration: const BoxDecoration(
+                                      color: appPrimaryColor,
+                                      shape: BoxShape.circle),
+                                  child: const Icon(Icons.camera_alt,
+                                      color: Colors.white, size:15 ,)),
+                            ))
+                      ],
+                    ),
+                    vertical10,
                     const Text(
                       'Complete this process\nget started',
                       textAlign: TextAlign.center,
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Color(0xff626262)),
                     ),
-                    const SizedBox(height: 20),
-                    InkWell(
-                      onTap: () async {
-                        FilePickerResult? result =
-                            await FilePicker.platform.pickFiles();
-                        if (result != null) {
-                          file = File(result.files.single.path!);
-                          _filePath = result.files.single.path;
+                    vertical20,
+                    // Center(
+                    //   child: InkWell(
+                    //       // onTap: () async {
+                    //       //   FilePickerResult result = await FilePicker.platform
+                    //       //       .pickFiles(type: FileType.image);
+                    //       //   if (result != null) {
+                    //       //     file = File(result.files.single.path);
+                    //       //     _filePath = result.files.single.path;
 
-                          setState(() {});
-                        } else {
-                          // User canceled the picker
-                        }
-                      },
-                      child: Container(
-                        height: 145,
-                        width: 145,
-                        decoration: BoxDecoration(
-                          color: Colors.lightBlue.shade100,
-                          shape: BoxShape.circle,
-                          // image: DecorationImage(image: AssetImage('assets/images/profilepics.png',),fit: BoxFit.scaleDown )
-                        ),
-                        child: Center(
-                            child: file == null
-                                ? Image.asset(
-                                    'assets/images/profilepics.png',
-                                    height: 84,
-                                    width: 90,
-                                  )
-                                : Container(
-                                    height: 100,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                        color: Colors.lightBlue.shade100,
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                            image: FileImage(
-                                              file!,
-                                            ),
-                                            fit: BoxFit.cover)),
-                                  )),
-                      ),
-                    ),
-                    Center(
-                      child: InkWell(
-                          // onTap: () async {
-                          //   FilePickerResult result = await FilePicker.platform
-                          //       .pickFiles(type: FileType.image);
-                          //   if (result != null) {
-                          //     file = File(result.files.single.path);
-                          //     _filePath = result.files.single.path;
-
-                          //     setState(() {});
-                          //   } else {
-                          //     // User canceled the picker
-                          //   }
-                          // },
-                          child: file == null
-                              ? Text(
-                                  "Tap to add image",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 12),
-                                )
-                              : Text(
-                                  "Tap to change image",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 12),
-                                )),
-                    ),
+                    //       //     setState(() {});
+                    //       //   } else {
+                    //       //     // User canceled the picker
+                    //       //   }
+                    //       // },
+                    //       child: file == null
+                    //           ? Text(
+                    //               "Tap to add image",
+                    //               style: TextStyle(
+                    //                   color: Colors.black, fontSize: 12),
+                    //             )
+                    //           : Text(
+                    //               "Tap to change image",
+                    //               style: TextStyle(
+                    //                   color: Colors.black, fontSize: 12),
+                    //             )),
+                    // ),
                     CustomTextField(
                       labelText: 'First Name',
                       controller: firstNameController,
                       // validator: (value) => model.validateName(value),
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                     ),
+                    
                     vertical10,
                     CustomTextField(
                       labelText: 'Last Name',

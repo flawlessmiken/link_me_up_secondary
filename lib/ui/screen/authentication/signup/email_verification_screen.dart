@@ -114,10 +114,7 @@ class _EmailVerificationformState extends State<EmailVerificationform> {
                 ),
                 Text('Please enter the OTP sent to \n ${widget.email}',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    )),
+                    style: txStyle16),
                 const SizedBox(
                   height: 40,
                 ),
@@ -158,7 +155,7 @@ class _EmailVerificationformState extends State<EmailVerificationform> {
                   children: const [
                     TextSpan(
                       text: 'Resend OTP',
-                      style: TextStyle(color: Color(0xff25A244)),
+                      style: TextStyle(color: Color(0xff25A244), fontWeight: FontWeight.w600),
                     ),
                   ]),
             ),
@@ -192,7 +189,7 @@ class _EmailVerificationformState extends State<EmailVerificationform> {
                       // }
                       Get.to(BusinessRegistration());
                     },
-                    text: 'Proceed',
+                    text: 'Verify',
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
                 ),

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:link_me_up_secondary/constants/colors.dart';
 import 'package:link_me_up_secondary/ui/screen/authentication/signup/completation_screen.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
 
@@ -77,17 +78,12 @@ class _ProfilePictureState extends State<ProfilePicture> {
                               textAlign: TextAlign.center,
                               text: TextSpan(
                                 text: 'Hi ${widget.name}',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Theme.of(context).primaryColor),
+                                style: txStyle16.copyWith(color: appPrimaryColor),
                                 children: <TextSpan>[
                                   TextSpan(
                                     text:
                                         ' add your picture and Choose your unique name tag for identifying yourself',
-                                    style: Theme.of(context)
-                                        .primaryTextTheme
-                                        .headline3,
+                                    style: txStyle16,
                                   ),
                                 ],
                               ),

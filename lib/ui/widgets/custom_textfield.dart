@@ -128,9 +128,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 decoration: InputDecoration(
                   prefixIcon: widget.prefix,
               
-                  isDense: false,
+                  isDense: true,
                   contentPadding:
-                      EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      EdgeInsets.symmetric(horizontal: 12, vertical: 17),
                   labelText: widget.labelText2,
                   fillColor: widget.fillColor,
                   errorStyle: TextStyle(height: 0.5, fontSize: 10),

@@ -50,12 +50,12 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                     vertical5,
                     Text(
                       "Linkmeup Security ",
-                      style: txStyle17Boldwt.copyWith(fontSize: 18),
+                      style: txStyle17Boldwt.copyWith(fontSize: 18, fontWeight: FontWeight.w400),
                     ),
                     vertical5,
                     Text(
                       "Identity & Access management",
-                      style: txStyle16Boldwt,
+                      style: txStyle16Boldwt.copyWith(fontWeight: FontWeight.w400),
                     ),
                   ],
                 ),
@@ -78,7 +78,6 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                         "Linkmeup Security",
                         style: txStyle27Bold.copyWith(color: appPrimaryColor),
                       ),
-                      vertical10,
                       Text(
                         "Experience a secure world,\neveryday.",
                         textAlign: TextAlign.center,

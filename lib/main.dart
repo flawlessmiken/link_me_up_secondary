@@ -25,6 +25,7 @@ class LinkMeUpPrimary extends StatelessWidget {
       providers: AppProviders.providers,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        
         title: 'Link Me Up',
         theme: appThemeLight,
         routes: RouteNames.routes,

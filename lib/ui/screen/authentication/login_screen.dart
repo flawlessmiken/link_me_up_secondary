@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:link_me_up_secondary/constants/colors.dart';
 import 'package:link_me_up_secondary/constants/route_names.dart';
+import 'package:link_me_up_secondary/ui/screen/main/home_screen.dart';
 import 'package:link_me_up_secondary/ui/size_config/size_config.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
 import 'package:link_me_up_secondary/ui/widgets/custom_button.dart';
@@ -41,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Row(
                             children: [
                               InkWell(
-                                onTap: (){
+                                onTap: () {
                                   Get.back();
                                 },
                                 child: SvgPicture.asset(
@@ -118,7 +119,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         Expanded(
                           child: CustomButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.offAll(HomeScreen());
+                            },
                             backgroundColor: appPrimaryColor,
                             text: "Login",
                             textColor: Colors.white,

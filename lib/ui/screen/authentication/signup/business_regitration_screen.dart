@@ -42,7 +42,7 @@ class _BusinessRegistrationState extends State<BusinessRegistration> {
         body: Column(
           children: [
              CustomAppBar(
-          title: 'Enter ${selectedIdentityType} details',
+          title: 'Enter ${selectedIdentityType.toLowerCase()} details',
         ),
             Expanded(
               child: Padding(
