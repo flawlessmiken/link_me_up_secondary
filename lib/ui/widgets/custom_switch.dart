@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class SwitchButton extends StatefulWidget {
+class SwitchButtonWidget extends StatefulWidget {
   final String title;
   bool tap;
   ValueChanged<bool>? onChanged;
-  SwitchButton({Key? key, this.title='', this.tap = false, this.onChanged})
+  SwitchButtonWidget({Key? key, this.title='', this.tap = false, this.onChanged})
       : super(key: key);
 
   @override
-  State<SwitchButton> createState() => _SwitchButtonState();
+  State<SwitchButtonWidget> createState() => _SwitchButtonWidgetState();
 }
 
-class _SwitchButtonState extends State<SwitchButton> {
+class _SwitchButtonWidgetState extends State<SwitchButtonWidget> {
   @override
   Widget build(BuildContext context) {
     bool isSwitched = widget.tap;

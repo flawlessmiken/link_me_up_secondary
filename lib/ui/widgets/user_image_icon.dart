@@ -17,14 +17,13 @@ class UserImageIcon extends StatelessWidget {
         height: radius,
         width: radius,
         decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border:
-                Border.all(width: 2, color: Theme.of(context).primaryColor)),
+          shape: BoxShape.circle,
+        ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(radius - 10),
           child: CachedNetworkImage(
             imageUrl: imageUrl,
-            fit: BoxFit.fill,
+            fit: BoxFit.cover,
             placeholder: (context, url) => CircularProgressIndicator(),
             errorWidget: (context, url, error) => Container(
               height: radius,
@@ -38,8 +37,6 @@ class UserImageIcon extends StatelessWidget {
         ));
   }
 }
-
-
 
 class UserImageIconRect extends StatelessWidget {
   UserImageIconRect({
@@ -57,12 +54,12 @@ class UserImageIconRect extends StatelessWidget {
         height: radius,
         width: radius,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            // border:
-            //     Border.all(width: 2, color: Theme.of(context).primaryColor)
-                ),
+          borderRadius: BorderRadius.circular(100),
+          // border:
+          //     Border.all(width: 2, color: Theme.of(context).primaryColor)
+        ),
         child: ClipRRect(
-           borderRadius: BorderRadius.circular(radius/7),
+          borderRadius: BorderRadius.circular(radius / 7),
           child: CachedNetworkImage(
             imageUrl: imageUrl,
             fit: BoxFit.fill,
@@ -72,7 +69,7 @@ class UserImageIconRect extends StatelessWidget {
               width: radius,
               decoration: BoxDecoration(
                   // shape: BoxShape.circle,
-                   borderRadius: BorderRadius.circular(100),
+                  borderRadius: BorderRadius.circular(100),
                   image: DecorationImage(
                       image: AssetImage('assets/face.png'), fit: BoxFit.fill)),
             ),

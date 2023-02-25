@@ -4,6 +4,15 @@ import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:link_me_up_secondary/constants/colors.dart';
 import 'package:link_me_up_secondary/ui/mixin/responsive_state/view_state.dart';
+import 'package:link_me_up_secondary/ui/screen/main/drawer/blocked/blocked_screen.dart';
+import 'package:link_me_up_secondary/ui/screen/main/drawer/contacts/contact_screen.dart';
+import 'package:link_me_up_secondary/ui/screen/main/drawer/directory/directory_screen.dart';
+import 'package:link_me_up_secondary/ui/screen/main/drawer/history/history_screen.dart';
+import 'package:link_me_up_secondary/ui/screen/main/drawer/order/order_screen.dart';
+import 'package:link_me_up_secondary/ui/screen/main/drawer/profile/user_profile_screen.dart';
+import 'package:link_me_up_secondary/ui/screen/main/drawer/settings/settings_screen.dart';
+import 'package:link_me_up_secondary/ui/screen/main/drawer/subscription/subscrition_screen.dart';
+import 'package:link_me_up_secondary/ui/screen/main/drawer/user/user_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/start_screen/login_signup_screen.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
 
@@ -13,21 +22,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../mixin/responsive_state/responsive_state.dart';
 import '../../size_config/size_config.dart';
 import '../../widgets/user_image_icon.dart';
-
-List bottomSheetItem = [
-  {"title": "View Profile", "icon": "assets/svg_icon/Groupprofile.svg"},
-  {"title": "Directory", "icon": "assets/svg_icon/Vectordirectory.svg"},
-  {"title": "User", "icon": "assets/svg_icon/clarity_users-solidusers.svg"},
-  {"title": "Order", "icon": "assets/svg_icon/Grouporder.svg"},
-  {"title": "Contact", "icon": "assets/svg_icon/Vectorcontact.svg"},
-  {"title": "History", "icon": "assets/svg_icon/Vectorhistory.svg"},
-  {"title": "Blocked", "icon": "assets/svg_icon/Vectorblocked.svg"},
-  {"title": "Subscription", "icon": "assets/svg_icon/Vectorsubscription.svg"},
-  {"title": "Settings", "icon": "assets/svg_icon/settings.svg"},
-  {"title": "About us", "icon": "assets/svg_icon/Vectorabout us.svg"},
-  {"title": "Tell a friend", "icon": "assets/svg_icon/Grouptell a friend.svg"},
-  {"title": "Logout", "icon": "assets/svg_icon/Vectorlogout.svg"}
-];
 
 List entreies = [
   {
@@ -135,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
             horizontalx20,
           ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         floatingActionButton: FloatingActionButton(
           backgroundColor: appPrimaryColor,
           onPressed: () {
@@ -177,19 +171,19 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Icon(Icons.qr_code_scanner),
           elevation: 5,
         ),
-        bottomNavigationBar: BottomAppBar(
-          shape: CircularNotchedRectangle(),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                height: 40,
-              ),
-            ],
-          ),
-          color: appPrimaryColor,
-        ),
+        // bottomNavigationBar: BottomAppBar(
+        //   shape: CircularNotchedRectangle(),
+        //   child: Row(
+        //     mainAxisSize: MainAxisSize.max,
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: <Widget>[
+        //       Container(
+        //         height: 40,
+        //       ),
+        //     ],
+        //   ),
+        //   color: appPrimaryColor,
+        // ),
         body: ResponsiveState(
           idleWidget: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -335,6 +329,27 @@ class _HomeScreenState extends State<HomeScreen> {
   buildSheet() {
     // final user = Provider.of<UserRepository>(context);
     // UserProfile userData = user.user;
+    List bottomSheetItem = [
+      {"title": "View Profile", "icon": "assets/svg_icon/Groupprofile.svg"},
+      {"title": "Directory", "icon": "assets/svg_icon/Vectordirectory.svg"},
+      {"title": "User", "icon": "assets/svg_icon/clarity_users-solidusers.svg"},
+      {"title": "Order", "icon": "assets/svg_icon/Grouporder.svg"},
+      {"title": "Contact", "icon": "assets/svg_icon/Vectorcontact.svg"},
+      {"title": "History", "icon": "assets/svg_icon/Vectorhistory.svg"},
+      {"title": "Blocked", "icon": "assets/svg_icon/Vectorblocked.svg"},
+      {
+        "title": "Subscription",
+        "icon": "assets/svg_icon/Vectorsubscription.svg"
+      },
+      {"title": "Settings", "icon": "assets/svg_icon/settings.svg"},
+      {"title": "About us", "icon": "assets/svg_icon/Vectorabout us.svg"},
+      {
+        "title": "Tell a friend",
+        "icon": "assets/svg_icon/Grouptell a friend.svg"
+      },
+      {"title": "Logout", "icon": "assets/svg_icon/Vectorlogout.svg"}
+    ];
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Container(
@@ -417,22 +432,35 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onpressed(int index) async {
     switch (index) {
       case 0:
+        Get.to(UserProfileScreen());
         break;
       case 1:
+        Get.to(DirectoryScreen());
         break;
       case 2:
+        Get.to(UserScreen());
         break;
       case 3:
+      Get.to(OrderScreen());
         break;
       case 4:
+      Get.to(ContactScreen());
         break;
       case 5:
+      Get.to(HistoryScreen());
+
         break;
       case 6:
+      Get.to(BlockedScreen());
+
         break;
       case 7:
+      Get.to(BusinessSubscription());
+
         break;
       case 8:
+      Get.to(SettingScreen());
+
         break;
       case 11:
         SharedPreferences prefs = await SharedPreferences.getInstance();

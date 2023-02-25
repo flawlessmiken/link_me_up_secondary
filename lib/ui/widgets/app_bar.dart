@@ -22,6 +22,7 @@ class CustomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      centerTitle: true,
       elevation: elavation,
       iconTheme:
           IconThemeData(color: textColor ?? Theme.of(context).primaryColor),
