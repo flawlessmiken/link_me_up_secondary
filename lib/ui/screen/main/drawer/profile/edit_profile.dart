@@ -64,7 +64,7 @@ class _UserProfileScreenState extends State<EditProfile> {
             idleWidget: Expanded(
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                    EdgeInsets.symmetric(horizontal: SizeConfig.widthOf(4)),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -145,7 +145,11 @@ class _UserProfileScreenState extends State<EditProfile> {
                       const SizedBox(
                         height: 10,
                       ),
-                       Center(child: Text("@MTN", style: txStyle12.copyWith(color: Colors.grey),)),
+                      Center(
+                          child: Text(
+                        "@MTN",
+                        style: txStyle12.copyWith(color: Colors.grey),
+                      )),
                       const SizedBox(
                         height: 10,
                       ),
@@ -170,21 +174,23 @@ class _UserProfileScreenState extends State<EditProfile> {
                         hintText: "Plot 233, MTN PLAZA",
                         readOnly: true,
                       ),
-                       const SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       CustomTextField(
                         labelText: "Website",
                         hintText: "wwww.mtn.ng",
                         readOnly: true,
-                      ), const SizedBox(
+                      ),
+                      const SizedBox(
                         height: 10,
                       ),
                       CustomTextField(
                         labelText: "Business Email Address",
                         hintText: "officialemail@mtn.com",
                         readOnly: true,
-                      ), const SizedBox(
+                      ),
+                      const SizedBox(
                         height: 10,
                       ),
                       CustomTextField(
@@ -200,23 +206,27 @@ class _UserProfileScreenState extends State<EditProfile> {
                         busyWidget: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const SizedBox(
+                             SizedBox(
                                 height: 30,
                                 width: 30,
                                 child:
                                     CircularProgressIndicator(strokeWidth: 6)),
                           ],
                         ),
-                        idleWidget: Row(
-                          children: [
-                            Expanded(
-                              child: CustomButton(
-                                onPressed: () async {},
-                                text: 'Save changes',
-                                backgroundColor: Theme.of(context).primaryColor,
+                        idleWidget: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: CustomButton(
+                                  onPressed: () async {},
+                                  text: 'Save changes',
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],

@@ -8,7 +8,6 @@ import 'package:link_me_up_secondary/constants/colors.dart';
 import 'package:link_me_up_secondary/ui/screen/authentication/signup/completation_screen.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
 
-
 import 'package:provider/provider.dart';
 
 import '../../../../api/core/repositories/auth_repository.dart';
@@ -19,24 +18,10 @@ import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_textfield.dart';
 
 class ProfilePicture extends StatefulWidget {
-  final String? category;
-  final String? name;
-  final String? nameController;
-  final String? addressController;
-  final String? postalCodeController;
-  final String? websiteController;
-  final String? businessEmailController;
-  final String? businessPhoneController;
+  final String businessName;
   const ProfilePicture({
-    Key ?key,
-    this.category,
-    this.name,
-    this.nameController,
-    this.addressController,
-    this.postalCodeController,
-    this.websiteController,
-    this.businessEmailController,
-    this.businessPhoneController,
+    Key? key,
+    required this.businessName,
   }) : super(key: key);
 
   @override
@@ -47,7 +32,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
   final _key = GlobalKey<FormState>();
 
   File? file;
-  String ?_filePath;
+  String? _filePath;
   final TextEditingController nameTag = TextEditingController();
 
   @override
@@ -56,18 +41,17 @@ class _ProfilePictureState extends State<ProfilePicture> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      
-      body: Column(
-        children: [
-           CustomAppBar(
-        title: 'Add Picture & Tag Name',
-      ),
-          Expanded(
-            child: Form(
-              key: _key,
+      body: Form(
+        key: _key,
+        child: Column(
+          children: [
+            CustomAppBar(
+              title: 'Add Picture & Tag Name',
+            ),
+            Expanded(
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: SizeConfig.widthOf(5)),
+                padding:
+                    EdgeInsets.symmetric(horizontal: SizeConfig.widthOf(5)),
                 child: SingleChildScrollView(
                   child: Center(
                     child: Column(
@@ -77,8 +61,9 @@ class _ProfilePictureState extends State<ProfilePicture> {
                             child: RichText(
                               textAlign: TextAlign.center,
                               text: TextSpan(
-                                text: 'Hi ${widget.name}',
-                                style: txStyle16.copyWith(color: appPrimaryColor),
+                                text: 'Hi ${widget.businessName}',
+                                style:
+                                    txStyle16.copyWith(color: appPrimaryColor),
                                 children: <TextSpan>[
                                   TextSpan(
                                     text:
@@ -125,12 +110,12 @@ class _ProfilePictureState extends State<ProfilePicture> {
                                   bottom: 10,
                                   child: InkWell(
                                     onTap: () async {
-                                      FilePickerResult ?result =
+                                      FilePickerResult? result =
                                           await FilePicker.platform.pickFiles();
                                       if (result != null) {
                                         file = File(result.files.single.path!);
                                         _filePath = result.files.single.path;
-                
+
                                         setState(() {});
                                       } else {
                                         // User canceled the picker
@@ -140,7 +125,8 @@ class _ProfilePictureState extends State<ProfilePicture> {
                                         height: 40,
                                         width: 40,
                                         decoration: BoxDecoration(
-                                            color: Theme.of(context).primaryColor,
+                                            color:
+                                                Theme.of(context).primaryColor,
                                             shape: BoxShape.circle),
                                         child: const Icon(Icons.camera_alt,
                                             color: Colors.white)),
@@ -161,53 +147,27 @@ class _ProfilePictureState extends State<ProfilePicture> {
                         vertical30,
                         ResponsiveState(
                           state: model.state,
-                          busyWidget: const SizedBox(
-                              height: 30,
-                              width: 30,
-                              child: CircularProgressIndicator(strokeWidth: 6)),
+                          busyWidget: Center(
+                              child: CircularProgressIndicator(
+                            color: appPrimaryColor,
+                          )),
                           idleWidget: Row(
                             children: [
                               Expanded(
                                 child: CustomButton(
                                   onPressed: () async {
-                                    // SharedPreferences prefs =
-                                    //     await SharedPreferences.getInstance();
-                                    // String adminId = prefs.getString('adminId');
-                                    // if (!_key.currentState.validate()) return;
-                
-                                    // print(_filePath);
-                                    // bool u = await model.completeRegistration(
-                                    //   SecondaryCategoryName: widget.name,
-                                    //   SecondaryCategoryPicture: _filePath,
-                                    //   SecondaryCategoryNameTag: nameTag.text,
-                                    //   SecondaryCategoryType: widget.category,
-                                    //   SecondaryCategoryPostalCode:
-                                    //       widget.postalCodeController,
-                                    //   SecondaryCategoryAddress:
-                                    //       widget.addressController,
-                                    //   SecondaryCategoryWebsite:
-                                    //       widget.websiteController,
-                                    //   SecondaryCategoryEmailAddress:
-                                    //       widget.businessEmailController,
-                                    //   SecondaryCategoryPhoneNumber:
-                                    //       widget.businessPhoneController,
-                                    //   AdminId: adminId,
-                                    //   // email: widget.businessEmailController,
-                                    //   // phoneNumber:
-                                    //   //     widget.businessPhoneController
-                                    // );
-                                    // if (u) {
-                                    //   Navigator.push(
-                                    //       context,
-                                    //       MaterialPageRoute(
-                                    //           builder: (context) =>
-                                    //               CompletionScreen()));
-                                    // }
-                                    //Navigator.pushNamed(context, RouteNames.verifyScreen);
-                                    Get.to(CompletionScreen());
+                                    if (!_key.currentState!.validate()) return;
+
+                                    bool res = await model.addPictureAndNameTag(
+                                        nameTag.text,
+                                        _filePath!);
+
+                                    if (res) {
+                                      Get.to(CompletionScreen());
+                                    }
                                   },
                                   text: 'Proceed',
-                                  backgroundColor: Theme.of(context).primaryColor,
+                                  backgroundColor: appPrimaryColor,
                                 ),
                               ),
                             ],
@@ -219,8 +179,8 @@ class _ProfilePictureState extends State<ProfilePicture> {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

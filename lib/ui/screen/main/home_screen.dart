@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
+import 'package:link_me_up_secondary/api/core/repositories/user_repository.dart';
 import 'package:link_me_up_secondary/constants/colors.dart';
 import 'package:link_me_up_secondary/ui/mixin/responsive_state/view_state.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/blocked/blocked_screen.dart';
@@ -15,10 +16,12 @@ import 'package:link_me_up_secondary/ui/screen/main/drawer/subscription/subscrit
 import 'package:link_me_up_secondary/ui/screen/main/drawer/user/user_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/start_screen/login_signup_screen.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
+import 'package:link_me_up_secondary/ui/widgets/utils.dart';
 
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../api/core/repositories/auth_repository.dart';
 import '../../mixin/responsive_state/responsive_state.dart';
 import '../../size_config/size_config.dart';
 import '../../widgets/user_image_icon.dart';
@@ -93,6 +96,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authProv = Provider.of<AuthRepository>(context);
+
     // final user = Provider.of<UserRepository>(context);
     // UserProfile userData = user.user;
     // assets/svg_icon/menu.svg
@@ -117,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       backgroundColor: appPrimaryColor,
                       isScrollControlled: true,
                       context: context,
-                      builder: (context) => buildSheet());
+                      builder: (context) => buildSheet(context));
                 },
               );
             },
@@ -320,13 +325,15 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           busyWidget: Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              color: appPrimaryColor,
+            ),
           ),
           state: ViewState.Idle,
         ));
   }
 
-  buildSheet() {
+  buildSheet(BuildContext context) {
     // final user = Provider.of<UserRepository>(context);
     // UserProfile userData = user.user;
     List bottomSheetItem = [
@@ -349,6 +356,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       {"title": "Logout", "icon": "assets/svg_icon/Vectorlogout.svg"}
     ];
+    final userProv = Provider.of<UserRepository>(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
@@ -364,7 +372,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   // ${userData.data.pictureUrl}
                   UserImageIcon(
                     imageUrl:
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrCNcCooHQ5y2Fejefl0ypuGztlKAw6kIcPw&usqp=CAU",
+                        "${userProv.userInfoResponse.data?.profilePicture}",
                     radius: 50,
                   ),
                   const SizedBox(
@@ -374,12 +382,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          "Akinsola"
-                          " Akins",
+                          capitalizeFirstText(
+                              "${userProv.userInfoResponse.data?.firstName}"
+                              " ${userProv.userInfoResponse.data?.lastName}"),
                           style: txStyle14wt.copyWith(
                             fontWeight: FontWeight.w400,
                           )),
-                      Text("Admin", style: txStyle12wt),
+                      Text("${userProv.userInfoResponse.data?.role}",
+                          style: txStyle12wt),
                     ],
                   ),
                 ],
@@ -441,25 +451,25 @@ class _HomeScreenState extends State<HomeScreen> {
         Get.to(UserScreen());
         break;
       case 3:
-      Get.to(OrderScreen());
+        Get.to(OrderScreen());
         break;
       case 4:
-      Get.to(ContactScreen());
+        Get.to(ContactScreen());
         break;
       case 5:
-      Get.to(HistoryScreen());
+        Get.to(HistoryScreen());
 
         break;
       case 6:
-      Get.to(BlockedScreen());
+        Get.to(BlockedScreen());
 
         break;
       case 7:
-      Get.to(BusinessSubscription());
+        Get.to(BusinessSubscription());
 
         break;
       case 8:
-      Get.to(SettingScreen());
+        Get.to(SettingScreen());
 
         break;
       case 11:

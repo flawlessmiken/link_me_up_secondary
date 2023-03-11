@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:link_me_up_secondary/ui/screen/main/home_screen.dart';
 import 'package:link_me_up_secondary/ui/widgets/user_image_icon.dart';
 
 import '../../../../api/core/repositories/auth_repository.dart';
@@ -19,7 +21,7 @@ class CompletionScreen extends StatefulWidget {
 class _CompletionScreenState extends State<CompletionScreen> {
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<AuthRepository>(context);
+    final authProv = Provider.of<AuthRepository>(context);
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
@@ -37,23 +39,27 @@ class _CompletionScreenState extends State<CompletionScreen> {
                     SizedBox(
                       height: SizeConfig.heightOf(8),
                     ),
-                    UserImageIcon(imageUrl: "imageUrl", radius: 100,),
+                    UserImageIcon(
+                      imageUrl:
+                          "${authProv.completeProfileResponse.data?.picture}",
+                      radius: 100,
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
                     Text(
-                      'Akinsola',
+                      '${authProv.completeProfileResponse.data?.name}',
                       style: Theme.of(context).primaryTextTheme.headline3,
                     ),
                     Text(
-                      '@akinsola',
+                      '${authProv.completeProfileResponse.data?.nameTag}',
                       style: Theme.of(context).primaryTextTheme.subtitle2,
                     ),
                     SizedBox(
                       height: SizeConfig.heightOf(8),
                     ),
                     Text(
-                      'Hi Akinsola 👋',
+                      '${authProv.completeProfileResponse.data?.name} 👋',
                       style: Theme.of(context).primaryTextTheme.headline3,
                     ),
                     const SizedBox(
@@ -73,14 +79,7 @@ class _CompletionScreenState extends State<CompletionScreen> {
                         Expanded(
                           child: CustomButton(
                             onPressed: () {
-                              // model.displayError(
-                              //     error: "Hello there 👋",
-                              //     message:
-                              //         "Login to experience top notch security");
-                              // Navigator.pushNamedAndRemoveUntil(
-                              //     context,
-                              //     RouteNames.startScreenDecision,
-                              //     (route) => false);
+                              Get.offAll(HomeScreen());
                             },
                             text: 'Finish',
                             textColor: Colors.white,

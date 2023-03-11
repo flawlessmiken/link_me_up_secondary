@@ -1,6 +1,10 @@
 /// Class of validation functions that the app will use
 ///   - This class should be used as a mixin using the `with` keyword
 class Validators {
+  String password = "";
+  String PIN = "";
+
+
   final phoneNumberRegExp = RegExp(
       r'^([0-9]( |-)?)?(\(?[0-9]{3}\)?|[0-9]{3})( |-)?([0-9]{3}( |-)?[0-9]{4}|[a-zA-Z0-9]{7})$');
   final emailRegExp = RegExp(
@@ -46,6 +50,36 @@ class Validators {
       return 'password field cannot be empty';
     } else if (value.length < 8) {
       return 'password is too short';
+    }
+    password = value;
+    return null;
+  }
+
+  String? confirmPassword(String confirmPassword) {
+    if (confirmPassword != password) {
+      return 'passwords do not match';
+    } else if (confirmPassword.isEmpty) {
+      return 'confirm password field cannot be empty';
+    }
+    return null;
+  }
+
+
+  String? validatePIN(String value) {
+    if (value.trim().isEmpty) {
+      return 'password field cannot be empty';
+    } else if (value.length < 6) {
+      return 'password is too short';
+    }
+  PIN = value;
+    return null;
+  }
+
+  String? confirmPin(String confirmPassword) {
+    if (confirmPassword != PIN) {
+      return 'PINs do not match';
+    } else if (confirmPassword.isEmpty) {
+      return 'confirm PIN field cannot be empty';
     }
     return null;
   }

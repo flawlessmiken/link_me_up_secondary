@@ -1,8 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:get/get.dart';
+import 'package:link_me_up_secondary/constants/colors.dart';
 import 'package:link_me_up_secondary/ui/screen/authentication/signup/business_regitration_screen.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
 import 'package:provider/provider.dart';
@@ -15,10 +18,10 @@ import '../../../widgets/app_bar.dart';
 import '../../../widgets/custom_button.dart';
 
 class EmailVerification extends StatelessWidget {
-  final String? email;
+  final String email;
   const EmailVerification({
     Key? key,
-    this.email,
+   required this.email,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class EmailVerification extends StatelessWidget {
         Expanded(
           child: Container(
             padding: EdgeInsets.all(SizeConfig.widthOf(5)),
-            child: EmailVerificationform(email: "email"),
+            child: EmailVerificationform(email: email),
           ),
         ),
       ],
@@ -92,7 +95,7 @@ class _EmailVerificationformState extends State<EmailVerificationform> {
 
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<AuthRepository>(context);
+    final authProv = Provider.of<AuthRepository>(context);
     Size size = MediaQuery.of(context).size;
     return Form(
       key: _key,
@@ -113,14 +116,13 @@ class _EmailVerificationformState extends State<EmailVerificationform> {
                   height: 20,
                 ),
                 Text('Please enter the OTP sent to \n ${widget.email}',
-                    textAlign: TextAlign.center,
-                    style: txStyle16),
+                    textAlign: TextAlign.center, style: txStyle16),
                 const SizedBox(
                   height: 40,
                 ),
                 Pinput(
                   // validator: (value) => model.validateOTP(value),
-                  length: 4,
+                  length: 6,
                   obscureText: true,
                   pinAnimationType: PinAnimationType.slide,
                   controller: _pinPutController,
@@ -140,10 +142,12 @@ class _EmailVerificationformState extends State<EmailVerificationform> {
           ),
           InkWell(
             onTap: () async {
-              // print(widget.email);
-              // await model.resendOtp(
-              //   email: widget.email,
-              // );
+              log(
+                widget.email!,
+              );
+              await authProv.resendOTP(
+                widget.email!,
+              );
 
               //Navigator.pushNamed(context, RouteNames.verifyScreen);
             },
@@ -155,39 +159,40 @@ class _EmailVerificationformState extends State<EmailVerificationform> {
                   children: const [
                     TextSpan(
                       text: 'Resend OTP',
-                      style: TextStyle(color: Color(0xff25A244), fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          color: Color(0xff25A244),
+                          fontWeight: FontWeight.w600),
                     ),
                   ]),
             ),
           ),
           vertical30,
           ResponsiveState(
-            state: model.state,
-            busyWidget: const SizedBox(
-                height: 30,
-                width: 30,
-                child: CircularProgressIndicator(strokeWidth: 6)),
+            state: authProv.state,
+            busyWidget: CircularProgressIndicator(
+              color: appPrimaryColor,
+            ),
             idleWidget: Row(
               children: [
                 Expanded(
                   child: CustomButton(
                     onPressed: () async {
-                      // if (!_key.currentState.validate()) {
-                      //   setState(() {
-                      //     hasError = true;
-                      //   });
-                      //   return;
-                      // }
-
-                      // bool u = await model.validateOtp(
-                      //   email: widget.email,
-                      //   code: _pinPutController.text,
-                      // );
-                      // if (u) {
-                      //   Navigator.pushNamed(
-                      //       context, RouteNames.businessRegistration);
-                      // }
-                      Get.to(BusinessRegistration());
+                      log(
+                        widget.email!,
+                      );
+                      if (!_key.currentState!.validate()) {
+                        setState(() {
+                          hasError = true;
+                        });
+                        return;
+                      }
+                      bool u = await authProv.validateOTP(
+                        widget.email!,
+                        _pinPutController.text,
+                      );
+                      if (u) {
+                        Get.to(BusinessRegistration());
+                      }
                     },
                     text: 'Verify',
                     backgroundColor: Theme.of(context).primaryColor,

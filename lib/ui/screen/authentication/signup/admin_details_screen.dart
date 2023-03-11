@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:link_me_up_secondary/constants/colors.dart';
+import 'package:link_me_up_secondary/ui/mixin/responsive_state/responsive_state.dart';
 import 'package:link_me_up_secondary/ui/screen/authentication/signup/userpin_screen.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
 import 'package:phone_form_field/phone_form_field.dart';
@@ -52,209 +53,224 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<AuthRepository>(context);
+    final authProv = Provider.of<AuthRepository>(context);
 
     return Scaffold(
-      body: Column(
-        children: [
-          CustomAppBar(
-            title: 'Enter admin details',
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        InkWell(
-                          onTap: () async {
-                            FilePickerResult? result =
-                                await FilePicker.platform.pickFiles();
-                            if (result != null) {
-                              file = File(result.files.single.path!);
-                              _filePath = result.files.single.path;
-
-                              setState(() {});
-                            } else {
-                              // User canceled the picker
-                            }
-                          },
-                          child: Container(
-                            height: 74,
-                            width: 74,
-                            decoration: BoxDecoration(
-                              color: Colors.lightBlue.shade100,
-                              shape: BoxShape.circle,
-                              // image: DecorationImage(image: AssetImage('assets/images/profilepics.png',),fit: BoxFit.scaleDown )
-                            ),
-                            child: Center(
-                                child: file == null
-                                    ? Image.asset(
-                                        'assets/images/profilepics.png',
-                                        height: 30,
-                                        width: 30,
-                                      )
-                                    : Container(
-                                        height: 100,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                            color: Colors.lightBlue.shade100,
-                                            shape: BoxShape.circle,
-                                            image: DecorationImage(
-                                                image: FileImage(
-                                                  file!,
-                                                ),
-                                                fit: BoxFit.cover)),
-                                      )),
-                          ),
-                        ),
-                        Positioned(
-                            right: 0,
-                            bottom: 0,
-                            child: InkWell(
-                              onTap: () async {
-                                FilePickerResult? result =
-                                    await FilePicker.platform.pickFiles();
-                                if (result != null) {
-                                  file = File(result.files.single.path!);
-                                  _filePath = result.files.single.path;
-
-                                  setState(() {});
-                                } else {
-                                  // User canceled the picker
-                                }
-                              },
-                              child: Container(
-                                  height: 20,
-                                  width: 20,
-                                  decoration: const BoxDecoration(
-                                      color: appPrimaryColor,
-                                      shape: BoxShape.circle),
-                                  child: const Icon(Icons.camera_alt,
-                                      color: Colors.white, size:15 ,)),
-                            ))
-                      ],
-                    ),
-                    vertical10,
-                    const Text(
-                      'Complete this process\nget started',
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Color(0xff626262)),
-                    ),
-                    vertical20,
-                    // Center(
-                    //   child: InkWell(
-                    //       // onTap: () async {
-                    //       //   FilePickerResult result = await FilePicker.platform
-                    //       //       .pickFiles(type: FileType.image);
-                    //       //   if (result != null) {
-                    //       //     file = File(result.files.single.path);
-                    //       //     _filePath = result.files.single.path;
-
-                    //       //     setState(() {});
-                    //       //   } else {
-                    //       //     // User canceled the picker
-                    //       //   }
-                    //       // },
-                    //       child: file == null
-                    //           ? Text(
-                    //               "Tap to add image",
-                    //               style: TextStyle(
-                    //                   color: Colors.black, fontSize: 12),
-                    //             )
-                    //           : Text(
-                    //               "Tap to change image",
-                    //               style: TextStyle(
-                    //                   color: Colors.black, fontSize: 12),
-                    //             )),
-                    // ),
-                    CustomTextField(
-                      labelText: 'First Name',
-                      controller: firstNameController,
-                      // validator: (value) => model.validateName(value),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                    ),
-                    
-                    vertical10,
-                    CustomTextField(
-                      labelText: 'Last Name',
-                      controller: lastNameController,
-                      // validator: (value) => model.validateName(value),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                    ),
-                    vertical10,
-                    Container(
-                      margin: EdgeInsets.only(bottom: 5),
-                      child: PhoneNumberInput(
-                        controller: phoneNumber,
-                      ),
-                    ),
-                    vertical10,
-                    CustomTextField(
-                      labelText: 'Email',
-                      textInputType: TextInputType.emailAddress,
-                      controller: emailController,
-                      // validator: (value) => model.validateEmail(value),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                    ),
-                    vertical10,
-                    CustomTextField(
-                      labelText: 'Password',
-                      obscureText: true,
-                      controller: passwordController,
-                      // validator: (value) => model.validatePassword(value),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                    ),
-                    vertical10,
-                    CustomTextField(
-                      labelText: 'Confirm Password',
-                      controller: confirmController,
-                      obscureText: true,
-                      // validator: (value) => model.validatePassword(value),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
+      body: Form(
+        key: _key,
+        child: Column(
+          children: [
+            CustomAppBar(
+              title: 'Enter admin details',
+            ),
+            Expanded(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Stack(
                         children: [
-                          Expanded(
-                              child: CustomButton(
-                            text: 'Next',
-                            onPressed: () {
-                              // if (!_key.currentState.validate()) return;
+                          InkWell(
+                            onTap: () async {
+                              FilePickerResult? result =
+                                  await FilePicker.platform.pickFiles();
+                              if (result != null) {
+                                file = File(result.files.single.path!);
+                                _filePath = result.files.single.path;
 
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => UserPin(
-                              //               image: _filePath,
-                              //               FirstName: firstNameController.text,
-                              //               LastName: lastNameController.text,
-                              //               Email: emailController.text,
-                              //               PhoneNumber: phoneNumbercontroller.text,
-                              //               password: passwordController.text,
-                              //               ConfrirmPassword: confirmController.text,
-                              //             )));
-
-                              Get.to(UserPin());
+                                setState(() {});
+                              } else {
+                                // User canceled the picker
+                              }
                             },
-                          ))
+                            child: Container(
+                              height: 74,
+                              width: 74,
+                              decoration: BoxDecoration(
+                                color: Colors.lightBlue.shade100,
+                                shape: BoxShape.circle,
+                                // image: DecorationImage(image: AssetImage('assets/images/profilepics.png',),fit: BoxFit.scaleDown )
+                              ),
+                              child: Center(
+                                  child: file == null
+                                      ? Image.asset(
+                                          'assets/images/profilepics.png',
+                                          height: 30,
+                                          width: 30,
+                                        )
+                                      : Container(
+                                          height: 100,
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                              color: Colors.lightBlue.shade100,
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                  image: FileImage(
+                                                    file!,
+                                                  ),
+                                                  fit: BoxFit.cover)),
+                                        )),
+                            ),
+                          ),
+                          Positioned(
+                              right: 0,
+                              bottom: 0,
+                              child: InkWell(
+                                onTap: () async {
+                                  FilePickerResult? result =
+                                      await FilePicker.platform.pickFiles();
+                                  if (result != null) {
+                                    file = File(result.files.single.path!);
+                                    _filePath = result.files.single.path;
+
+                                    setState(() {});
+                                  } else {
+                                    // User canceled the picker
+                                  }
+                                },
+                                child: Container(
+                                    height: 20,
+                                    width: 20,
+                                    decoration: const BoxDecoration(
+                                        color: appPrimaryColor,
+                                        shape: BoxShape.circle),
+                                    child: const Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.white,
+                                      size: 15,
+                                    )),
+                              ))
                         ],
                       ),
-                    ),
-                    vertical50
-                  ],
+                      vertical10,
+                      const Text(
+                        'Complete this process\nget started',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xff626262)),
+                      ),
+                      vertical20,
+                      // Center(
+                      //   child: InkWell(
+                      //       // onTap: () async {
+                      //       //   FilePickerResult result = await FilePicker.platform
+                      //       //       .pickFiles(type: FileType.image);
+                      //       //   if (result != null) {
+                      //       //     file = File(result.files.single.path);
+                      //       //     _filePath = result.files.single.path;
+
+                      //       //     setState(() {});
+                      //       //   } else {
+                      //       //     // User canceled the picker
+                      //       //   }
+                      //       // },
+                      //       child: file == null
+                      //           ? Text(
+                      //               "Tap to add image",
+                      //               style: TextStyle(
+                      //                   color: Colors.black, fontSize: 12),
+                      //             )
+                      //           : Text(
+                      //               "Tap to change image",
+                      //               style: TextStyle(
+                      //                   color: Colors.black, fontSize: 12),
+                      //             )),
+                      // ),
+                      CustomTextField(
+                        labelText: 'First Name',
+                        controller: firstNameController,
+                        validator: (value) => authProv.validateName(value!),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                      ),
+
+                      vertical10,
+                      CustomTextField(
+                        labelText: 'Last Name',
+                        controller: lastNameController,
+                        validator: (value) => authProv.validateName(value!),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                      ),
+                      vertical10,
+                      Container(
+                        margin: EdgeInsets.only(bottom: 5),
+                        child: PhoneNumberInput(
+                          controller: phoneNumber,
+                        ),
+                      ),
+                      vertical10,
+                      CustomTextField(
+                        labelText: 'Email',
+                        textInputType: TextInputType.emailAddress,
+                        controller: emailController,
+                        validator: (value) => authProv.validateEmail(value!),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                      ),
+                      vertical10,
+                      CustomTextField(
+                        labelText: 'Password',
+                        obscureText: true,
+                        controller: passwordController,
+                        validator: (value) => authProv.validatePassword(value!),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                      ),
+                      vertical10,
+                      CustomTextField(
+                        labelText: 'Confirm Password',
+                        controller: confirmController,
+                        obscureText: true,
+                        validator: (value) => authProv.confirmPassword(value!),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ResponsiveState(
+                        state: authProv.state,
+                        busyWidget: Center(
+                          child:
+                              CircularProgressIndicator(color: appPrimaryColor),
+                        ),
+                        idleWidget: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  child: CustomButton(
+                                text: 'Next',
+                                onPressed: () async {
+                                  if (!_key.currentState!.validate()) return;
+                                  var pNumber =
+                                      '${phoneNumber.value?.countryCode}${phoneNumber.value?.nsn}';
+                                  bool res = await authProv.createAdminDetails(
+                                      firstNameController.text,
+                                      lastNameController.text,
+                                      pNumber,
+                                      emailController.text,
+                                      passwordController.text,
+                                      _filePath!);
+                                  if (res) {
+                                    Get.to(UserPin(
+                                      email: emailController.text,
+                                    ));
+                                  }
+                                },
+                              ))
+                            ],
+                          ),
+                        ),
+                      ),
+                      vertical50
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

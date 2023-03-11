@@ -9,6 +9,8 @@ import 'package:phone_form_field/phone_form_field.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../api/core/repositories/auth_repository.dart';
+import '../../../../constants/colors.dart';
+import '../../../mixin/responsive_state/responsive_state.dart';
 import '../../../styles/text_styles.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_textfield.dart';
@@ -23,7 +25,7 @@ class Business extends StatelessWidget {
   final TextEditingController? businessPhoneController;
   final GlobalKey<FormState>? formKey;
 
-   Business({
+  Business({
     Key? key,
     this.formKey,
     this.nameController,
@@ -36,12 +38,11 @@ class Business extends StatelessWidget {
 
   PhoneController phoneNumber = PhoneController(null);
 
-
   @override
   Widget build(BuildContext context) {
     final _key = GlobalKey<FormState>();
 
-    final model = Provider.of<AuthRepository>(context);
+    final authProv = Provider.of<AuthRepository>(context);
 
     return Form(
       key: _key,
@@ -50,21 +51,21 @@ class Business extends StatelessWidget {
           CustomTextField(
             labelText: 'Business Name',
             controller: nameController,
-            validator: (value) => model.validateName(value!),
+            validator: (value) => authProv.validateName(value!),
             autovalidateMode: AutovalidateMode.onUserInteraction,
           ),
           vertical10,
           CustomTextField(
             labelText: 'Business Address',
             controller: addressController,
-            validator: (value) => model.validateName(value!),
+            validator: (value) => authProv.validateName(value!),
             autovalidateMode: AutovalidateMode.onUserInteraction,
           ),
           vertical10,
           CustomTextField(
             labelText: 'Postal Code',
             controller: postalCodeController,
-            validator: (value) => model.validateZip(value!),
+            validator: (value) => authProv.validateZip(value!),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             isDate: true,
           ),
@@ -77,49 +78,56 @@ class Business extends StatelessWidget {
           CustomTextField(
             labelText: 'Business Email Address ',
             controller: businessEmailController,
-            validator: (value) => model.validateEmail(value!),
+            validator: (value) => authProv.validateEmail(value!),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             textInputType: TextInputType.emailAddress,
           ),
           vertical10,
           Container(
-                      margin: EdgeInsets.only(bottom: 5),
-                      child: PhoneNumberInput(
-                        controller: phoneNumber,
-                      ),
-                    ),
+            margin: EdgeInsets.only(bottom: 5),
+            child: PhoneNumberInput(
+              controller: phoneNumber,
+            ),
+          ),
           SizedBox(
             height: 30,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Row(
-              children: [
-                Expanded(
-                    child: CustomButton(
-                  text: 'Next',
-                  onPressed: () {
-                    // if (!_key.currentState.validate()) return;
+          ResponsiveState(
+            state: authProv.state,
+            busyWidget: Center(
+              child: CircularProgressIndicator(
+                color: appPrimaryColor,
+              ),
+            ),
+            idleWidget: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: CustomButton(
+                    text: 'Next',
+                    onPressed: () async {
+                      if (!_key.currentState!.validate()) return;
+                      var pNumber =
+                          '${phoneNumber.value?.countryCode}${phoneNumber.value?.nsn}';
+                      bool res = await authProv.createBusinessProfile(
+                          "business",
+                          nameController!.text,
+                          postalCodeController!.text,
+                          addressController!.text,
+                          businessEmailController!.text,
+                          pNumber,
+                          websiteController!.text);
 
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => ProfilePicture(
-                    //               name: nameController.text,
-                    //               addressController: addressController.text,
-                    //               postalCodeController:
-                    //                   postalCodeController.text,
-                    //               websiteController: websiteController.text,
-                    //               businessEmailController:
-                    //                   businessEmailController.text,
-                    //               businessPhoneController:
-                    //                   businessPhoneController.text,
-                    //               category: 'Business',
-                    //             )));
-                    Get.to(ProfilePicture());
-                  },
-                ))
-              ],
+                      if (res) {
+                        Get.to(ProfilePicture(
+                          businessName: nameController!.text,
+                        ));
+                      }
+                    },
+                  ))
+                ],
+              ),
             ),
           )
         ],

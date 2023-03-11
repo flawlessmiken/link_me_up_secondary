@@ -7,10 +7,11 @@ import 'package:link_me_up_secondary/ui/screen/authentication/signup/profile_pic
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 
-
 import 'package:provider/provider.dart';
 
 import '../../../../api/core/repositories/auth_repository.dart';
+import '../../../../constants/colors.dart';
+import '../../../mixin/responsive_state/responsive_state.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_textfield.dart';
 import '../../../widgets/phone_number_input.dart';
@@ -23,7 +24,7 @@ class Home extends StatelessWidget {
   final TextEditingController? businessPhoneController;
   final GlobalKey<FormState>? formKey;
 
-   Home({
+  Home({
     Key? key,
     this.formKey,
     this.nameController,
@@ -33,14 +34,13 @@ class Home extends StatelessWidget {
     this.businessPhoneController,
   }) : super(key: key);
 
-    PhoneController phoneNumber = PhoneController(null);
-
+  PhoneController phoneNumber = PhoneController(null);
 
   @override
   Widget build(BuildContext context) {
-  final _key = GlobalKey<FormState>();
+    final _key = GlobalKey<FormState>();
 
-    final model = Provider.of<AuthRepository>(context);
+    final authProv = Provider.of<AuthRepository>(context);
 
     return Form(
       key: _key,
@@ -49,75 +49,82 @@ class Home extends StatelessWidget {
           CustomTextField(
             labelText: 'Home Name',
             controller: nameController,
-            validator: (value) => model.validateName(value!),
+            validator: (value) => authProv.validateName(value!),
             autovalidateMode: AutovalidateMode.onUserInteraction,
           ),
           vertical10,
           CustomTextField(
             labelText: 'Home Address',
             controller: addressController,
-            validator: (value) => model.validateName(value!),
+            validator: (value) => authProv.validateName(value!),
             autovalidateMode: AutovalidateMode.onUserInteraction,
           ),
           vertical10,
-
           CustomTextField(
             labelText: 'Postal Code',
             controller: postalCodeController,
             textInputType: TextInputType.number,
-            validator: (value) => model.validateZip(value!),
+            validator: (value) => authProv.validateZip(value!),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             isDate: true,
           ),
           vertical10,
-
           CustomTextField(
             labelText: 'Home Email Address ',
             controller: businessEmailController,
             textInputType: TextInputType.emailAddress,
-            validator: (value) => model.validateEmail(value!),
+            validator: (value) => authProv.validateEmail(value!),
             autovalidateMode: AutovalidateMode.onUserInteraction,
           ),
           vertical10,
-
           Container(
-                      margin: EdgeInsets.only(bottom: 5),
-                      child: PhoneNumberInput(
-                        controller: phoneNumber,
-                      ),
-                    ),
+            margin: EdgeInsets.only(bottom: 5),
+            child: PhoneNumberInput(
+              controller: phoneNumber,
+            ),
+          ),
           SizedBox(
             height: 30,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Row(
-              children: [
-                Expanded(
-                    child: CustomButton(
-                  text: 'Next',
-                  onPressed: () {
-                    // if (!_key.currentState.validate()) return;
+         ResponsiveState(
+            state: authProv.state,
+            busyWidget: Center(
+              child: CircularProgressIndicator(
+                color: appPrimaryColor,
+              ),
+            ),
+            idleWidget: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: CustomButton(
+                    text: 'Next',
+                    onPressed: () async {
+                      if (!_key.currentState!.validate()) return;
+          
+                      if (!_key.currentState!.validate()) return;
+                      var pNumber =
+                          '${phoneNumber.value?.countryCode}${phoneNumber.value?.nsn}';
+                      bool res = await authProv.createBusinessProfile(
+                          "home",
+                          nameController!.text,
+                          postalCodeController!.text,
+                          addressController!.text,
+                          businessEmailController!.text,
+                          pNumber,
+                          "");
+          
+                      if (res) {
+                        Get.to(ProfilePicture(
+                          businessName: nameController!.text,
 
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => ProfilePicture(
-                    //               name: nameController.text,
-                    //               addressController: addressController.text,
-                    //               postalCodeController:
-                    //                   postalCodeController.text,
-                    //               businessEmailController:
-                    //                   businessEmailController.text,
-                    //               businessPhoneController:
-                    //                   businessPhoneController.text,
-                    //               category: 'Home',
-                    //             )));
-                    Get.to(ProfilePicture());
-
-                  },
-                ))
-              ],
+                        ));
+                      }
+                    },
+                  ))
+                ],
+              ),
             ),
           )
         ],

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:link_me_up_secondary/ui/screen/authentication/login_screen.dart';
+import 'package:link_me_up_secondary/ui/screen/authentication/login/login_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/start_screen/login_signup_screen.dart';
 
 import '../ui/screen/start_screen/splashScreen.dart';

@@ -16,22 +16,10 @@ import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_textfield.dart';
 
 class UserPin extends StatefulWidget {
-  final String? FirstName;
-  final String? LastName;
-  final String? Email;
-  final String? PhoneNumber;
-  final String? password;
-  final String? ConfrirmPassword;
-  final String? image;
+  final String email;
   const UserPin({
     Key? key,
-    this.image,
-    this.FirstName,
-    this.LastName,
-    this.Email,
-    this.PhoneNumber,
-    this.password,
-    this.ConfrirmPassword,
+    required this.email,
   }) : super(key: key);
 
   @override
@@ -73,14 +61,14 @@ class _UserPinState extends State<UserPin> {
 
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<AuthRepository>(context);
+    final authProv = Provider.of<AuthRepository>(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         body: Form(
       key: _key,
       child: Column(
         children: [
-          CustomAppBar(title: 'Create Pin'),
+          CustomAppBar(title: 'Create PIN'),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -103,67 +91,51 @@ class _UserPinState extends State<UserPin> {
                       height: 30,
                     ),
                     CustomTextField(
-                      labelText: 'Enter Pin',
+                      labelText: 'Enter PIN',
                       hintText: '*******',
                       controller: pin1Controller,
                       obscureText: true,
                       textInputType: TextInputType.number,
-                      // validator: (value) => model.validatePin(value),
+                      validator: (value) => authProv.validatePIN(value!),
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                     ),
                     vertical30,
                     CustomTextField(
-                      labelText: 'Confirm Pin',
+                      labelText: 'Confirm PIN',
                       hintText: '*******',
                       obscureText: true,
                       // isPin: true,
                       controller: pin2Controller,
                       textInputType: TextInputType.number,
-                      // validator: (value) => model.validatePin(value),
+                      validator: (value) => authProv.confirmPin(value!),
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                     ),
                     vertical30,
                     ResponsiveState(
-                      state: model.state,
+                      state: authProv.state,
                       busyWidget: Center(
-                        child: const SizedBox(
-                            height: 30,
-                            width: 30,
-                            child: CircularProgressIndicator(strokeWidth: 6)),
+                        child: CircularProgressIndicator(
+                          color: appPrimaryColor,
+                        ),
                       ),
                       idleWidget: Row(
                         children: [
                           Expanded(
                             child: CustomButton(
                               onPressed: () async {
-                                // if (!_key.currentState.validate()) return;
-                        
-                                // bool u = await model.adminRegistration(
-                                //   image: widget.image,
-                                //   FirstName: widget.FirstName,
-                                //   LastName: widget.LastName,
-                                //   PhoneNumber: widget.PhoneNumber,
-                                //   Email: widget.Email,
-                                //   password: widget.password,
-                                //   ConfrirmPassword: widget.ConfrirmPassword,
-                                //   PIN: pin1Controller.text,
-                                //   ConfirmPIN: pin2Controller.text,
-                                //   deviceId: deviceId,
-                                //   deviceType: deviceType,
-                                // );
-                        
-                                // if (u) {
-                                //   Navigator.push(
-                                //       context,
-                                //       MaterialPageRoute(
-                                //           builder: (context) =>
-                                //               EmailVerification(
-                                //                   email: widget.Email)));
-                                // }
+                                if (!_key.currentState!.validate()) return;
 
-                                Get.to(EmailVerification());
+                                bool res = await authProv.createPin(
+                                    pin1Controller.text,
+                                    pin2Controller.text);
+
+                                if (res) {
+                                  Get.to(EmailVerification(
+                                    email: widget.email,
+                                  ));
+                                }
                               },
-                              text: 'Create Pin',
+                              text: 'Create PIN',
                               backgroundColor: appPrimaryColor,
                             ),
                           ),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:link_me_up_secondary/locator.dart';
 import 'package:provider/provider.dart';
 
 import 'constants/providers.dart';
@@ -11,7 +12,10 @@ import 'theme/app_theme_light.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(LinkMeUpPrimary());
+  setupLocator();
+
+  runApp(MultiProvider(
+      providers: AppProviders.providers, child: LinkMeUpPrimary()));
 }
 
 class LinkMeUpPrimary extends StatelessWidget {
@@ -25,7 +29,6 @@ class LinkMeUpPrimary extends StatelessWidget {
       providers: AppProviders.providers,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        
         title: 'Link Me Up',
         theme: appThemeLight,
         routes: RouteNames.routes,

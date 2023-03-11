@@ -2,7 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:link_me_up_secondary/constants/colors.dart';
 import 'package:link_me_up_secondary/ui/screen/authentication/signup/schoolDetails.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../api/core/repositories/auth_repository.dart';
 import '../../../widgets/app_bar.dart';
 import '../../../widgets/registration_drop_down.dart';
 import 'businessDetails.dart';
@@ -38,6 +40,8 @@ class _BusinessRegistrationState extends State<BusinessRegistration> {
 
   @override
   Widget build(BuildContext context) {
+    final authProv = Provider.of<AuthRepository>(context);
+
     return Scaffold(
         body: Column(
           children: [
