@@ -48,17 +48,18 @@ class _PhoneNumberInputState extends State<PhoneNumberInput> {
             defaultCountry: IsoCode.NG,
             enabled: true,
             decoration: InputDecoration(
+              isDense: false,
               hintText: 'Phone number',
-              hintStyle: txStyle14,
+              hintStyle: txStyle14.copyWith(color: Colors.grey),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: Color(0xff25A244).withOpacity(0.5),
                   width: 1,
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
               ),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
                 borderSide: BorderSide(
                   width: 1,
                   style: BorderStyle.solid,

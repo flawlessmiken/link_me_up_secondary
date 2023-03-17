@@ -58,12 +58,12 @@ class _CustomDropdownState extends State<CustomDropdown> {
       children: [
         widget.labelText != null
             ? Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: SizeConfig.widthOf(1)),
+                padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.widthOf(1), vertical: 2.75),
                 child: Text(
                   widget.labelText!,
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -75,7 +75,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                 stream: focusController.stream,
                 builder: (context, snapshot) {
                   return Container(
-                    height: 49,
+                    height: 58,
                     // width: SizeConfig.screenWidth,
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -101,7 +101,10 @@ class _CustomDropdownState extends State<CustomDropdown> {
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: Text(
                                   value,
-                                  style: const TextStyle(color: Colors.black),
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
                                 ),
                               ),
                             );

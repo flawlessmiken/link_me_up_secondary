@@ -22,4 +22,18 @@ class ApiRoutes {
 
   static const String forgotPasswordChangePassword =
       '$base/api/secondary/user/forgot-password/change-password';
+
+  //users
+  static const String addNewUser = '$base/api/secondary/user/new';
+  static const String getRoles = '$base/api/secondary/users/roles';
+  static const String getAllUser = '$base/api/secondary/users/all';
+  static const String getUserDetails = '$base/api/secondary/user/';
+  static const String updateUserDetails = '$base/api/secondary/user/';
+
+  //
+
+
+  
+
+
 }

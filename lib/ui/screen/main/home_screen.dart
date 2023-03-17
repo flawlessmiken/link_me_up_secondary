@@ -413,7 +413,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: InkWell(
                           onTap: () {
-                            _onpressed(index);
+                            _onpressed(index, context);
                           },
                           child: Row(
                             children: [
@@ -439,7 +439,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _onpressed(int index) async {
+  void _onpressed(int index, BuildContext context) async {
+    final userProv = Provider.of<UserRepository>(context, listen: false);
+
     switch (index) {
       case 0:
         Get.to(UserProfileScreen());
@@ -448,6 +450,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Get.to(DirectoryScreen());
         break;
       case 2:
+        userProv.fetchAllUser();
         Get.to(UserScreen());
         break;
       case 3:
