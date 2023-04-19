@@ -27,13 +27,62 @@ class ApiRoutes {
   static const String addNewUser = '$base/api/secondary/user/new';
   static const String getRoles = '$base/api/secondary/users/roles';
   static const String getAllUser = '$base/api/secondary/users/all';
-  static const String getUserDetails = '$base/api/secondary/user/';
-  static const String updateUserDetails = '$base/api/secondary/user/';
+  static const String getUserDetails = '$base/api/secondary/user';
+  static const String updateUserDetails = '$base/api/secondary/user';
+  static const String getSecondaryAccount = '$base/api/secondary/account-info';
 
-  //
+  //notifications
+  static const String getNotification = '$base/api/secondary/notification';
+  static const String toggleNotificationView =
+      '$base/api/secondary/notification/view';
+  static const String getNotificationDetails =
+      '$base/api/secondary/notification';
 
+  // enrollment
+  static const String getEnrollmentDetails =
+      '$base/api/secondary/enrollment/details';
+  static const String acceptEnrolment = '$base/api/secondary/enrollment';
+  static const String declineEnrolment = '$base/api/secondary/enrollment';
 
-  
+  // directory
+  static const String getDirectory = '$base/api/secondary/directory/all';
+  static const String getDirectoryDetails =
+      '$base/api/secondary/directory/user';
 
+  //block
+  static const String blockAUser = '$base/api/secondary/blocked';
+  static const String getAllBlockedUsers = '$base/api/secondary/blocked/all';
+  static const String unblockAUser = '$base/api/secondary/blocked';
 
+  //2FA
+  static const String validatePin = '$base/api/secondary/user/validate-pin';
+
+//contact
+  static const String getAllContact = '$base/api/secondary/contact/all';
+  static const String getContactDetails = '$base/api/secondary/contact';
+
+  //clockIn
+  static const String getClockInForToday = '$base/api/secondary/clocks/today';
+
+  //History
+  static const String getStaffHistory = '$base/api/secondary/history/staff';
+  static const String getStudentHistory = '$base/api/secondary/history/student';
+  static const String getResidentHistory =
+      '$base/api/secondary/history/resident';
+  static const String getGuestHistory = '$base/api/secondary/history/guests';
+  static const String getGuestHistoryDetails =
+      '$base/api/secondary/history/guest';
+  static const String getUserHistoryDetails =
+      '$base/api/secondary/history/user';
+
+  //cart
+  static const String addItemToCart = '$base/api/secondary/cart/items';
+  static const String removeItemFromCart = '$base/api/secondary/cart/items';
+  static const String getCartItem = '$base/api/secondary/cart';
+
+  //order
+  static const String getAllOrderProduct =
+      '$base/api/secondary/orders/products';
+  static const String getProductDetails = '$base/api/secondary/orders/product';
+  static const String processPayment = '$base/api/secondary/payment/charge';
 }

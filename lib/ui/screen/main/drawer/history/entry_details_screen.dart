@@ -2,12 +2,16 @@
 import 'package:flutter/material.dart';
 import 'package:link_me_up_secondary/ui/size_config/size_config.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
+import 'package:link_me_up_secondary/ui/widgets/utils.dart';
 
+import '../../../../../api/core/models/history_details_model.dart';
 import '../../../../widgets/app_bar.dart';
 import '../../../../widgets/user_image_icon.dart';
 
 class EntryDetails extends StatelessWidget {
-  const EntryDetails({Key? key}) : super(key: key);
+  final HistoryDetailsModel details;
+
+  const EntryDetails({Key? key, required this.details}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,67 +19,76 @@ class EntryDetails extends StatelessWidget {
       body: Column(
         children: [
           CustomAppBar(),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthOf(4)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: UserImageIcon(
-                    imageUrl:
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrCNcCooHQ5y2Fejefl0ypuGztlKAw6kIcPw&usqp=CAU",
-                    radius: 120,
-                  ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthOf(5)),
+              child: MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                removeBottom: true,
+                child: ListView(
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: UserImageIcon(
+                        imageUrl: "${details.data?.profilePicture}",
+                        radius: 120,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Center(
+                      child: Text(
+                        capitalizeFirstText("${details.data?.name}"),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        '@${details.data?.nameTag}',
+                        style: TextStyle(
+                            color: Colors.black.withOpacity(0.5), fontSize: 14),
+                      ),
+                    ),
+                    vertical20,
+                    Center(
+                        child: Text("${details.data?.userType}",
+                            style: TextStyle(fontSize: 16))),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text('History', style: TextStyle(fontSize: 16)),
+                    vertical20,
+                    MediaQuery.removePadding(
+                      context: context,
+                      removeTop: true,
+                      removeBottom: true,
+                      child: ListView.builder(
+                          itemCount: details.data?.entryRecords?.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            var data =
+                                details.data?.entryRecords?.elementAt(index);
+                            return Column(
+                              children: [
+                                vertical20,
+                                history(
+                                    status: "${data?.entryType}",
+                                    date: "${data?.date}",
+                                    time: "${data?.time}",
+                                    color: "${data?.entryType}" == "in"
+                                        ? Colors.green
+                                        : Colors.red),
+                              ],
+                            );
+                          }),
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Center(
-                  child: Text(
-                    'Chiamaka Odum',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    '@chiamakaodum22',
-                    style: TextStyle(
-                        color: Colors.black.withOpacity(0.5), fontSize: 14),
-                  ),
-                ),
-                vertical20,
-                Center(child: Text('Guest', style: TextStyle(fontSize: 16))),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text('Hisotry', style: TextStyle(fontSize: 16)),
-                vertical20,
-                history(
-                  status: 'in',
-                  date: '02 - 05 -2022',
-                  time: '2:24 PM',
-                  color: Colors.green,
-                ),
-                vertical20,
-                history(
-                  status: 'out',
-                  date: '02 - 05 -2022',
-                  time: '2:24 PM',
-                  color: Colors.red,
-                ),
-                vertical20,
-                history(
-                  status: 'Clocked',
-                  date: '02 - 05 -2022',
-                  time: '2:24 PM',
-                ),
-                vertical20,
-                history(
-                  status: 'Dismissed',
-                  date: '02 - 05 -2022',
-                  time: '2:24 PM',
-                ),
-              ],
+              ),
             ),
           ),
         ],
@@ -100,20 +113,33 @@ class history extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          status,
-          style: TextStyle(color: color),
+        Expanded(
+          child: Text(
+            status,
+            style: TextStyle(color: color),
+          ),
         ),
         Spacer(),
-        Text(
-          date,
-          style: TextStyle(color: Colors.black.withOpacity(0.5)),
+        SizedBox(
+          width: 100,
+          child: Row(
+            children: [
+              Text(
+                date,
+                style: TextStyle(color: Colors.black.withOpacity(0.5)),
+              ),
+              // Spacer()
+            ],
+          ),
         ),
         Spacer(),
-        Text(
-          time,
-          style: TextStyle(color: Colors.black.withOpacity(0.5)),
+        Expanded(
+          child: Text(
+            time,
+            style: TextStyle(color: Colors.black.withOpacity(0.5)),
+          ),
         )
       ],
     );

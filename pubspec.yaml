@@ -38,11 +38,14 @@ dependencies:
   flutter_svg: ^1.0.3
   get: ^4.1.4
   get_it: ^7.2.0
-  image_cropper: ^3.0.0
   image_picker: ^0.8.5+3
+  intl: ^0.17.0
   phone_form_field: ^7.0.5
   pinput: ^2.0.4
   provider: ^6.0.5
+  pusher_client:
+    git:
+      url: https://github.com/thijskuilman/pusher_client.git
   rflutter_alert: ^2.0.4
   shared_preferences: ^2.0.18
   timeago: ^3.2.2

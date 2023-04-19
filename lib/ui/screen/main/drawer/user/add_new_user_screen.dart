@@ -77,33 +77,27 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
           const CustomAppBar(
             title: 'Add user',
           ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: 10, horizontal: SizeConfig.widthOf(4)),
-              child: MediaQuery.removePadding(
-                context: context,
-                removeTop: true,
-                removeBottom: true,
-                child: ListView(
-                  children: [
-                    Center(
-                      child: Stack(
-                        children: [
-                          InkWell(
-                            onTap: () async {
-                              FilePickerResult? result =
-                                  await FilePicker.platform.pickFiles();
-                              if (result != null) {
-                                file = File(result.files.single.path!);
-                                _filePath = result.files.single.path;
-
-                                setState(() {});
-                              } else {
-                                // User canceled the picker
-                              }
-                            },
-                            child: Container(
+          ResponsiveState(
+            state: userProv.state,
+            busyWidget: Center(
+              child: CircularProgressIndicator(
+                color: appPrimaryColor,
+              ),
+            ),
+            idleWidget: Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: 10, horizontal: SizeConfig.widthOf(4)),
+                child: MediaQuery.removePadding(
+                  context: context,
+                  removeTop: true,
+                  removeBottom: true,
+                  child: ListView(
+                    children: [
+                      Center(
+                        child: Stack(
+                          children: [
+                            Container(
                               height: 120,
                               width: 120,
                               decoration: BoxDecoration(
@@ -131,129 +125,131 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
                                                   fit: BoxFit.cover)),
                                         )),
                             ),
-                          ),
-                          Positioned(
-                              right: 0,
-                              bottom: 0,
-                              child: InkWell(
-                                onTap: () async {
-                                  FilePickerResult? result =
-                                      await FilePicker.platform.pickFiles();
-                                  if (result != null) {
-                                    file = File(result.files.single.path!);
-                                    _filePath = result.files.single.path;
+                            Positioned(
+                                right: 0,
+                                bottom: 0,
+                                child: InkWell(
+                                  onTap: () async {
+                                    FilePickerResult? result =
+                                        await FilePicker.platform.pickFiles();
+                                    if (result != null) {
+                                      file = File(result.files.single.path!);
+                                      _filePath = result.files.single.path;
+                                      log("$_filePath");
 
-                                    setState(() {});
-                                  } else {
-                                    // User canceled the picker
+                                      setState(() {});
+                                    } else {
+                                      // User canceled the picker
+                                    }
+                                  },
+                                  child: Container(
+                                      height: 40,
+                                      width: 40,
+                                      decoration: const BoxDecoration(
+                                          color: appPrimaryColor,
+                                          shape: BoxShape.circle),
+                                      child: const Icon(
+                                        Icons.camera_alt,
+                                        color: Colors.white,
+                                        size: 20,
+                                      )),
+                                ))
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      CustomTextField(
+                        labelText: 'First name',
+                        hintText: 'John',
+                        controller: firstName,
+                      ),
+                      vertical10,
+                      CustomTextField(
+                        labelText: 'Last name',
+                        hintText: 'Doe',
+                        controller: lastName,
+                      ),
+                      vertical10,
+                      Container(
+                        margin: EdgeInsets.only(bottom: 5),
+                        child: PhoneNumberInput(
+                          controller: phoneNumber,
+                        ),
+                      ),
+                      vertical10,
+                      CustomTextField(
+                        labelText: 'Email',
+                        hintText: 'JohnDoe@gmail.com',
+                        controller: email,
+                      ),
+                      vertical10,
+                      CustomTextField(
+                        labelText: 'Password',
+                        hintText: '*******',
+                        controller: password,
+                        obscureText: true,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      CustomDropdown(
+                        dropdownItem: getUserRoles(),
+                        selectedValue: selectedRole,
+                        onChanged: (option) {
+                          setState(() {
+                            selectedRole = option!;
+                          });
+                        },
+                        labelText: "Select user role",
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      ResponsiveState(
+                        state: userProv.state,
+                        busyWidget: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator(
+                                  color: appPrimaryColor,
+                                )),
+                          ],
+                        ),
+                        idleWidget: Row(
+                          children: [
+                            Expanded(
+                              child: CustomButton(
+                                onPressed: () async {
+                                  var pNumber =
+                                      '${phoneNumber.value?.countryCode}${phoneNumber.value?.nsn}';
+                                  bool u = await userProv.addNewUser(
+                                      firstName.text,
+                                      lastName.text,
+                                      pNumber,
+                                      email.text,
+                                      password.text,
+                                      _filePath!,
+                                      selectedRole);
+
+                                  if (u) {
+                                    Get.off(SuccessfulScreen());
                                   }
                                 },
-                                child: Container(
-                                    height: 40,
-                                    width: 40,
-                                    decoration: const BoxDecoration(
-                                        color: appPrimaryColor,
-                                        shape: BoxShape.circle),
-                                    child: const Icon(
-                                      Icons.camera_alt,
-                                      color: Colors.white,
-                                      size: 20,
-                                    )),
-                              ))
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    CustomTextField(
-                      labelText: 'First name',
-                      hintText: 'John',
-                      controller: firstName,
-                    ),
-                    vertical10,
-                    CustomTextField(
-                      labelText: 'Last name',
-                      hintText: 'Doe',
-                      controller: lastName,
-                    ),
-                    vertical10,
-                    Container(
-                      margin: EdgeInsets.only(bottom: 5),
-                      child: PhoneNumberInput(
-                        controller: phoneNumber,
-                      ),
-                    ),
-                    vertical10,
-                    CustomTextField(
-                      labelText: 'Email',
-                      hintText: 'JohnDoe@gmail.com',
-                      controller: email,
-                    ),
-                    vertical10,
-                    CustomTextField(
-                      labelText: 'Password',
-                      hintText: '*******',
-                      controller: password,
-                      obscureText: true,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    CustomDropdown(
-                      dropdownItem: getUserRoles(),
-                      selectedValue: selectedRole,
-                      onChanged: (option) {
-                        setState(() {
-                          selectedRole = option!;
-                        });
-                      },
-                      labelText: "Select user role",
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    ResponsiveState(
-                      state: userProv.state,
-                      busyWidget: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(
-                              height: 30,
-                              width: 30,
-                              child: CircularProgressIndicator(
-                                color: appPrimaryColor,
-                              )),
-                        ],
-                      ),
-                      idleWidget: Row(
-                        children: [
-                          Expanded(
-                            child: CustomButton(
-                              onPressed: () async {
-                                var pNumber =
-                                    '${phoneNumber.value?.countryCode}${phoneNumber.value?.nsn}';
-                                bool u = await userProv.addNewUser(
-                                    firstName.text,
-                                    lastName.text,
-                                    pNumber,
-                                    email.text,
-                                    password.text,
-                                    _filePath!,
-                                    selectedRole);
-
-                                if (u) {
-                                  Get.off(SuccessfulScreen());
-                                }
-                              },
-                              text: 'Add User',
-                              backgroundColor: appPrimaryColor,
+                                text: 'Add User',
+                                backgroundColor: appPrimaryColor,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      vertical20,
+                    ],
+                  ),
                 ),
               ),
             ),

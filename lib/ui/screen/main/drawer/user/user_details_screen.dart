@@ -65,13 +65,16 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                           " ${userProv.userDetailsModel.data?.lastName}"),
                       readOnly: true,
                     ),
+                    vertical10,
                     SmallCustomTextField(
                       labelText: "Username",
                       hintText: "${userProv.userDetailsModel.data?.email}",
                       readOnly: true,
                     ),
+                    vertical10,
+
                     SmallCustomTextField(
-                      labelText: "Role",
+                      labelText: "Position",
                       hintText: "${userProv.userDetailsModel.data?.role}",
                       readOnly: true,
                     ),
@@ -95,7 +98,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                         Expanded(
                           child: CustomButton(
                             onPressed: () {
-                              Get.to(EditUserScreen());
+                              Get.to(EditUserScreen(userDetailsModel:userProv.userDetailsModel ,));
                             },
                             text: "Edit",
                             borderColor: appPrimaryColor,

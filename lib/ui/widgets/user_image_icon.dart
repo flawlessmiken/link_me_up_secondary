@@ -2,14 +2,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class UserImageIcon extends StatelessWidget {
-  UserImageIcon({
-    Key? key,
-    required this.imageUrl,
-    this.radius = 60,
-  }) : super(key: key);
+  UserImageIcon(
+      {Key? key,
+      required this.imageUrl,
+      this.radius = 60,
+      this.isCircular = true})
+      : super(key: key);
 
   final String imageUrl;
   final double radius;
+  final bool isCircular;
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +19,12 @@ class UserImageIcon extends StatelessWidget {
         height: radius,
         width: radius,
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
+          shape: isCircular ? BoxShape.circle : BoxShape.rectangle,
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(radius - 10),
+          borderRadius: isCircular
+              ? BorderRadius.circular(radius - 10)
+              : BorderRadius.circular(10),
           child: CachedNetworkImage(
             imageUrl: imageUrl,
             fit: BoxFit.cover,
@@ -28,10 +32,13 @@ class UserImageIcon extends StatelessWidget {
             errorWidget: (context, url, error) => Container(
               height: radius,
               width: radius,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: AssetImage('assets/face.png'), fit: BoxFit.fill)),
+              child: Center(
+                child: Icon(Icons.error_outline),
+              ),
+              // decoration: BoxDecoration(
+              //     shape: BoxShape.circle,
+              //     image: DecorationImage(
+              //         image: AssetImage('assets/face.png'), fit: BoxFit.fill)),
             ),
           ),
         ));

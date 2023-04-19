@@ -20,15 +20,15 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () {
-      final userProv = Provider.of<UserRepository>(context, listen: false);
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   Future.delayed(Duration.zero, () {
+  //     final userProv = Provider.of<UserRepository>(context, listen: false);
 
-      userProv.getUserRoles();
-    });
-  }
+  //     userProv.getUserRoles();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -69,41 +69,44 @@ class _UserScreenState extends State<UserScreen> {
                           shrinkWrap: true,
                           itemCount: userProv.allUserModel.data?.length,
                           itemBuilder: ((context, index) {
-                            return InkWell(
-                              onTap: () {
-                                userProv.getUserDetails(userProv
-                                    .allUserModel.data!
-                                    .elementAt(index)
-                                    .id!);
-                                Get.to(UserDetailsScreen(
-                                  userId: userProv.allUserModel.data!
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: InkWell(
+                                onTap: () {
+                                  userProv.getUserDetails(userProv
+                                      .allUserModel.data!
                                       .elementAt(index)
-                                      .id!,
-                                ));
-                              },
-                              child: ListTile(
-                                leading: UserImageIcon(
-                                    imageUrl:
-                                        "${userProv.allUserModel.data?.elementAt(index).profilePicture}"),
-                                title: Text(
-                                    capitalizeFirstText(
-                                        "${userProv.allUserModel.data?.elementAt(index).firstName}"
-                                        " ${userProv.allUserModel.data?.elementAt(index).lastName}"),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                    )),
-                                subtitle: Text('@NonsoGodfrey',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    )),
-                                trailing: Text(
-                                    "${userProv.allUserModel.data?.elementAt(index).role}",
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    )),
+                                      .id!);
+                                  Get.to(UserDetailsScreen(
+                                    userId: userProv.allUserModel.data!
+                                        .elementAt(index)
+                                        .id!,
+                                  ));
+                                },
+                                child: ListTile(
+                                  leading: UserImageIcon(
+                                      imageUrl:
+                                          "${userProv.allUserModel.data?.elementAt(index).profilePicture}"),
+                                  title: Text(
+                                      capitalizeFirstText(
+                                          "${userProv.allUserModel.data?.elementAt(index).firstName}"
+                                          " ${userProv.allUserModel.data?.elementAt(index).lastName}"),
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      )),
+                                  // subtitle: Text('@NonsoGodfrey',
+                                  //     style: TextStyle(
+                                  //       fontSize: 12,
+                                  //       color: Colors.grey,
+                                  //     )),
+                                  trailing: Text(
+                                      "${userProv.allUserModel.data?.elementAt(index).role}",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      )),
+                                ),
                               ),
                             );
                           })),

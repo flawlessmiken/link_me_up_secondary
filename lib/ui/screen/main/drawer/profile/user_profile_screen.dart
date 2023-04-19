@@ -12,6 +12,7 @@ import 'package:pinput/pinput.dart';
 
 import 'package:provider/provider.dart';
 
+import '../../../../../api/core/repositories/user_repository.dart';
 import '../../../../mixin/responsive_state/responsive_state.dart';
 import '../../../../size_config/size_config.dart';
 import '../../../../styles/text_styles.dart';
@@ -80,21 +81,22 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userProv = Provider.of<UserRepository>(context);
+
     // final user = Provider.of<UserRepository>(context);
     // IndividualUerModel userProfile = user.inidividualUserData;
     return Scaffold(
       body: Column(
         children: [
           const CustomAppBar(
-            title: 'profile',
+            title: 'Profile',
           ),
           ResponsiveState(
-            state: ViewState.Idle,
+            state: userProv.state,
             busyWidget: const Center(
-              child: SizedBox(
-                  height: 30,
-                  width: 30,
-                  child: CircularProgressIndicator(strokeWidth: 6)),
+              child: CircularProgressIndicator(
+                color: appPrimaryColor,
+              ),
             ),
             idleWidget: Expanded(
               child: Padding(
@@ -106,23 +108,25 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Center(
                           child: UserImageIcon(
                         imageUrl:
-                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrCNcCooHQ5y2Fejefl0ypuGztlKAw6kIcPw&usqp=CAU",
+                            "${userProv.secondaryAccountInfo.data?.picture}",
                         radius: 120,
                       )),
                       const SizedBox(
                         height: 10,
                       ),
                       Text(
-                        "MTN",
+                        "${userProv.secondaryAccountInfo.data?.name}",
                         style: txStyle16,
                       ),
                       Text(
-                        "@mtn",
+                        "@${userProv.secondaryAccountInfo.data?.nameTag}",
                         style: txStyle12.copyWith(color: Colors.grey),
                       ),
+                      vertical20,
                       SmallCustomTextField(
                         labelText: "Category",
-                        hintText: "Business",
+                        hintText:
+                            "${userProv.secondaryAccountInfo.data?.category}",
                         readOnly: true,
                       ),
                       const SizedBox(
@@ -130,7 +134,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                       SmallCustomTextField(
                         labelText: "Phone number",
-                        hintText: "+2349031129609",
+                        hintText:
+                            "${userProv.secondaryAccountInfo.data?.phoneNumber}",
                         readOnly: true,
                       ),
                       const SizedBox(
@@ -138,7 +143,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                       SmallCustomTextField(
                         labelText: "Email",
-                        hintText: "MTN@mtn.com.ng",
+                        hintText:
+                            "${userProv.secondaryAccountInfo.data?.email}",
                         readOnly: true,
                       ),
                       const SizedBox(
@@ -146,7 +152,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                       SmallCustomTextField(
                         labelText: "Official Website",
-                        hintText: "www.mtn.com",
+                        hintText:
+                            "${userProv.secondaryAccountInfo.data?.website}",
                         readOnly: true,
                       ),
                       const SizedBox(
@@ -154,7 +161,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                       SmallCustomTextField(
                         labelText: "Address",
-                        hintText: "Plot 233, MTN PLAZA",
+                        hintText:
+                            "${userProv.secondaryAccountInfo.data?.address}",
                         readOnly: true,
                       ),
                       SizedBox(
@@ -208,33 +216,53 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                   color: Color(0xffE41521)),
                                             ),
                                             vertical20,
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: Colors.black
-                                                          .withOpacity(0.5)),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: Padding(
+                                            ResponsiveState(
+                                              state: userProv.state,
+                                              busyWidget: Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: appPrimaryColor,
+                                                ),
+                                              ),
+                                              idleWidget: Padding(
                                                 padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Pinput(
-                                                  // validator: (value) => model.validateOTP(value),
-                                                  length: 4,
-                                                  obscureText: true,
-                                                  pinAnimationType:
-                                                      PinAnimationType.slide,
-                                                  controller: _pinPutController,
-                                                  focusNode: _pinPutFocusNode,
-                                                  defaultPinTheme:
-                                                      defaultPinTheme,
-                                                  forceErrorState: hasError,
-                                                  showCursor: true,
-                                                  cursor: cursor,
-                                                  obscuringCharacter: '*',
-                                                  preFilledWidget:
-                                                      preFilledWidget,
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color: Colors.black
+                                                              .withOpacity(
+                                                                  0.5)),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5)),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 5),
+                                                    child: Pinput(
+                                                      // validator: (value) => model.validateOTP(value),
+                                                      length: 6,
+                                                      obscureText: true,
+                                                      pinAnimationType:
+                                                          PinAnimationType
+                                                              .slide,
+                                                      controller:
+                                                          _pinPutController,
+                                                      focusNode:
+                                                          _pinPutFocusNode,
+                                                      defaultPinTheme:
+                                                          defaultPinTheme,
+                                                      forceErrorState: hasError,
+                                                      showCursor: true,
+                                                      cursor: cursor,
+                                                      obscuringCharacter: '*',
+                                                      preFilledWidget:
+                                                          preFilledWidget,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -244,8 +272,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 InkWell(
-                                                  onTap: () {
-                                                    Get.to(EditProfile());
+                                                  onTap: () async {
+                                                    Get.close(1);
+
+                                                    bool u = await userProv
+                                                        .validateUserPin(
+                                                            _pinPutController
+                                                                .text);
+                                                    if (u) {
+                                                      Get.to(EditProfile());
+                                                    }
+                                                    _pinPutController.clear();
                                                   },
                                                   child: Container(
                                                     height: 35,
@@ -264,20 +301,25 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                   ),
                                                 ),
                                                 horizontalx20,
-                                                Container(
-                                                  height: 35,
-                                                  width: 100,
-                                                  decoration: BoxDecoration(
-                                                    color: Color(0xffE41521),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5),
+                                                InkWell(
+                                                  onTap: () {
+                                                    Get.close(1);
+                                                  },
+                                                  child: Container(
+                                                    height: 35,
+                                                    width: 100,
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xffE41521),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                    ),
+                                                    child: Center(
+                                                        child: Text(
+                                                      "Cancel",
+                                                      style: txStyle14wt,
+                                                    )),
                                                   ),
-                                                  child: Center(
-                                                      child: Text(
-                                                    "Cancel",
-                                                    style: txStyle14wt,
-                                                  )),
                                                 ),
                                               ],
                                             ),

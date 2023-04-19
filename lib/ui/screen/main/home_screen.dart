@@ -6,6 +6,7 @@ import 'package:link_me_up_secondary/api/core/repositories/user_repository.dart'
 import 'package:link_me_up_secondary/constants/colors.dart';
 import 'package:link_me_up_secondary/ui/mixin/responsive_state/view_state.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/blocked/blocked_screen.dart';
+import 'package:link_me_up_secondary/ui/screen/main/drawer/clocking/clocking_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/contacts/contact_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/directory/directory_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/history/history_screen.dart';
@@ -14,6 +15,7 @@ import 'package:link_me_up_secondary/ui/screen/main/drawer/profile/user_profile_
 import 'package:link_me_up_secondary/ui/screen/main/drawer/settings/settings_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/subscription/subscrition_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/user/user_screen.dart';
+import 'package:link_me_up_secondary/ui/screen/main/notifcation/notifcation_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/start_screen/login_signup_screen.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
 import 'package:link_me_up_secondary/ui/widgets/utils.dart';
@@ -96,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authProv = Provider.of<AuthRepository>(context);
+    final userProv = Provider.of<UserRepository>(context);
 
     // final user = Provider.of<UserRepository>(context);
     // UserProfile userData = user.user;
@@ -130,7 +132,32 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: [
             SvgPicture.asset("assets/svg_icon/cameracamera.svg"),
             horizontalx20,
-            SvgPicture.asset("assets/svg_icon/notificationnotification.svg"),
+            InkWell(
+                onTap: () {
+                  userProv.fetchNotification();
+                  Get.to(NotificationScreen());
+                },
+                child: Center(
+                  child: Stack(
+                    children: [
+                      SvgPicture.asset(
+                          "assets/svg_icon/notificationnotification.svg"),
+                      userProv.hasNewNotification
+                          ? Positioned(
+                              right: 0,
+                              child: Container(
+                                height: 5,
+                                width: 5,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffD60A0A),
+                                    border: Border.all(color: Colors.white),
+                                    shape: BoxShape.circle),
+                              ),
+                            )
+                          : SizedBox.shrink(),
+                    ],
+                  ),
+                )),
             horizontalx20,
           ],
         ),
@@ -138,27 +165,31 @@ class _HomeScreenState extends State<HomeScreen> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: appPrimaryColor,
           onPressed: () {
-            showDialog<String>(
+            showDialog(
               context: context,
               builder: (BuildContext context) => AlertDialog(
-                backgroundColor: Colors.grey,
+                backgroundColor: Colors.white,
                 content: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     InkWell(
                         onTap: () {}, child: const Text('Admin / Sub-admin')),
+                    vertical10,
                     Divider(
                       color: Colors.black,
                     ),
+                    vertical10,
                     InkWell(onTap: () {}, child: const Text('Reception')),
                     Divider(
                       color: Colors.black,
                     ),
+                    vertical10,
                     InkWell(onTap: () {}, child: const Text('Securtiy')),
                     Divider(
                       color: Colors.black,
                     ),
+                    vertical10,
                     InkWell(
                         onTap: () {
                           // Navigator.of(context).pop();
@@ -167,6 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Divider(
                       color: Colors.black,
                     ),
+                    vertical10,
                     InkWell(onTap: () {}, child: const Text('Security Out')),
                   ],
                 ),
@@ -339,6 +371,7 @@ class _HomeScreenState extends State<HomeScreen> {
     List bottomSheetItem = [
       {"title": "View Profile", "icon": "assets/svg_icon/Groupprofile.svg"},
       {"title": "Directory", "icon": "assets/svg_icon/Vectordirectory.svg"},
+      {"title": "Clocking", "icon": "assets/svg_icon/clocking.svg"},
       {"title": "User", "icon": "assets/svg_icon/clarity_users-solidusers.svg"},
       {"title": "Order", "icon": "assets/svg_icon/Grouporder.svg"},
       {"title": "Contact", "icon": "assets/svg_icon/Vectorcontact.svg"},
@@ -444,38 +477,55 @@ class _HomeScreenState extends State<HomeScreen> {
 
     switch (index) {
       case 0:
+        userProv.getSecondaryAccountInfo();
         Get.to(UserProfileScreen());
         break;
       case 1:
+        userProv.getDirectory();
         Get.to(DirectoryScreen());
         break;
       case 2:
+        userProv.getClockIn();
+        Get.to(ClockingScreen());
+        break;
+      case 3:
         userProv.fetchAllUser();
         Get.to(UserScreen());
         break;
-      case 3:
+      case 4:
+        userProv.getAllProduct();
+
         Get.to(OrderScreen());
         break;
-      case 4:
+      case 5:
+        userProv.getAllContact();
         Get.to(ContactScreen());
         break;
-      case 5:
+      case 6:
+        userProv.getGuestHistory(
+            DateTime.now().subtract(Duration(days: 20)).toIso8601String());
+        userProv.getStaffHistory(
+            DateTime.now().subtract(Duration(days: 20)).toIso8601String());
+
+        // userProv.getGuestHistory(DateTime.now().toIso8601String());
+
         Get.to(HistoryScreen());
 
         break;
-      case 6:
+      case 7:
+        userProv.getBlockedUsers();
         Get.to(BlockedScreen());
 
         break;
-      case 7:
+      case 8:
         Get.to(BusinessSubscription());
 
         break;
-      case 8:
+      case 9:
         Get.to(SettingScreen());
 
         break;
-      case 11:
+      case 12:
         SharedPreferences prefs = await SharedPreferences.getInstance();
         bool res = await prefs.clear();
         if (res) {

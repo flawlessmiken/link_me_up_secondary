@@ -5,8 +5,13 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:link_me_up_secondary/constants/colors.dart';
+import 'package:link_me_up_secondary/ui/mixin/responsive_state/responsive_state.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/history/history_details_screen.dart';
+import 'package:link_me_up_secondary/ui/widgets/utils.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../../api/core/repositories/user_repository.dart';
 import '../../../../size_config/size_config.dart';
 import '../../../../styles/text_styles.dart';
 import '../../../../widgets/app_bar.dart';
@@ -58,6 +63,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           fontSize: 55,
                           fontWeight: FontWeight.w500,
                         )),
+                    horizontalx10,
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -66,12 +72,20 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
                             )),
-                        Text(
-                            '${DateFormat('MMMM-yyyy').format(DateTime.now())}',
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w400,
-                            ))
+                        Row(
+                          children: [
+                            Text(
+                                '${DateFormat('MMMM-yyyy').format(DateTime.now())}',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w400,
+                                )),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              size: 18,
+                            )
+                          ],
+                        )
                       ],
                     )
                   ]),
@@ -88,7 +102,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 ),
                 vertical20,
                 DefaultTabController(
-                    length: 3,
+                    length: 2,
                     child: Builder(builder: (BuildContext context) {
                       final TabController? tabController =
                           DefaultTabController.of(context);
@@ -125,9 +139,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                         unselectedLabelColor:
                                             Colors.black.withOpacity(0.5),
                                         tabs: const [
-                                          Tab(
-                                            text: 'All',
-                                          ),
+                                         
                                           Tab(
                                             text: 'Guest',
                                           ),
@@ -141,7 +153,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   const Flexible(
                                       child: TabBarView(
                                     children: [
-                                      AllHistory(),
                                       GuestHistory(),
                                       StaffHistory()
                                     ],
@@ -220,38 +231,64 @@ class GuestHistory extends StatefulWidget {
 class _GuestHistoryState extends State<GuestHistory> {
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.removePadding(
-      context: context,
-      removeTop: true,
-      removeBottom: true,
-      child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: 1,
-          itemBuilder: ((context, index) {
-            return InkWell(
-              onTap: () {},
-              child: ListTile(
-                leading: UserImageIcon(
-                    imageUrl:
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrCNcCooHQ5y2Fejefl0ypuGztlKAw6kIcPw&usqp=CAU"),
-                title: Text('Nonso Godfrey',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    )),
-                subtitle: Text('@NonsoGodfrey',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
-                    )),
-                trailing: Text('Admin',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
-                    )),
-              ),
-            );
-          })),
+    final userProv = Provider.of<UserRepository>(context);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: ResponsiveState(
+        state: userProv.state,
+        busyWidget: Center(
+          child: CircularProgressIndicator(
+            color: appPrimaryColor,
+          ),
+        ),
+        idleWidget: MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          removeBottom: true,
+          child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: userProv.guestHistory.data?.length,
+              itemBuilder: ((context, index) {
+                var data = userProv.guestHistory.data?.elementAt(index);
+                return InkWell(
+                  onTap: () {
+                    userProv.getGuestHistoryDetails("${data?.id}");
+                    Get.to(HistoryDetailsScreen());
+                  },
+                  child: ListTile(
+                    leading: UserImageIcon(imageUrl: "${data?.profilePicture}"),
+                    title: Text(capitalizeFirstText("${data?.name}"),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        )),
+                    subtitle: Text('@${data?.nameTag}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        )),
+                    trailing: Column(
+                      children: [
+                        Text(
+                            DateFormat.MMMMd()
+                                .format(data?.date ?? DateTime.now()),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            )),
+                        Text('${data?.total}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black,
+                            )),
+                      ],
+                    ),
+                  ),
+                );
+              })),
+        ),
+      ),
     );
   }
 }
@@ -266,38 +303,64 @@ class StaffHistory extends StatefulWidget {
 class _StaffHistoryState extends State<StaffHistory> {
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.removePadding(
-      context: context,
-      removeTop: true,
-      removeBottom: true,
-      child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: 1,
-          itemBuilder: ((context, index) {
-            return InkWell(
-              onTap: () {},
-              child: ListTile(
-                leading: UserImageIcon(
-                    imageUrl:
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrCNcCooHQ5y2Fejefl0ypuGztlKAw6kIcPw&usqp=CAU"),
-                title: Text('Nonso Godfrey',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    )),
-                subtitle: Text('@NonsoGodfrey',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
-                    )),
-                trailing: Text('Admin',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
-                    )),
-              ),
-            );
-          })),
+    final userProv = Provider.of<UserRepository>(context);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: ResponsiveState(
+        state: userProv.state,
+        busyWidget: Center(
+          child: CircularProgressIndicator(
+            color: appPrimaryColor,
+          ),
+        ),
+        idleWidget: MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          removeBottom: true,
+          child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: userProv.staffHistory.data?.length,
+              itemBuilder: ((context, index) {
+                var data = userProv.staffHistory.data?.elementAt(index);
+                return InkWell(
+                  onTap: () {
+                    userProv.getUserHistoryDetails("${data?.id}");
+                    Get.to(HistoryDetailsScreen());
+                  },
+                  child: ListTile(
+                    leading: UserImageIcon(imageUrl: "${data?.profilePicture}"),
+                    title: Text(capitalizeFirstText("${data?.name}"),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        )),
+                    subtitle: Text('@${data?.nameTag}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        )),
+                    trailing: Column(
+                      children: [
+                        Text(
+                            DateFormat.MMMMd()
+                                .format(data?.date ?? DateTime.now()),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            )),
+                        Text('${data?.total}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black,
+                            )),
+                      ],
+                    ),
+                  ),
+                );
+              })),
+        ),
+      ),
     );
   }
 }

@@ -1,12 +1,17 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
+import 'package:link_me_up_secondary/ui/widgets/utils.dart';
 
+import '../../../../../api/core/models/history_details_model.dart';
+import '../../../../size_config/size_config.dart';
 import '../../../../widgets/app_bar.dart';
 import '../../../../widgets/user_image_icon.dart';
 
 class AppointmentList extends StatelessWidget {
-  const AppointmentList({Key? key}) : super(key: key);
+  final HistoryDetailsModel details;
+
+  const AppointmentList({Key? key, required this.details}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,68 +19,87 @@ class AppointmentList extends StatelessWidget {
       body: Column(
         children: [
           CustomAppBar(),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: UserImageIcon(
-                    imageUrl:
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrCNcCooHQ5y2Fejefl0ypuGztlKAw6kIcPw&usqp=CAU",
-                    radius: 120,
-                  ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: SizeConfig.widthOf(5),
+              ),
+              child: MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                removeBottom: true,
+                child: ListView(
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: UserImageIcon(
+                        imageUrl: "${details.data?.profilePicture}",
+                        radius: 120,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Center(
+                      child: Text(
+                        capitalizeFirstText("${details.data?.name}"),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        '@${details.data?.nameTag}',
+                        style: TextStyle(
+                            color: Colors.black.withOpacity(0.5), fontSize: 14),
+                      ),
+                    ),
+                    vertical20,
+                    Center(
+                        child: Text(
+                            capitalizeFirstText("${details.data?.userType}"),
+                            style: TextStyle(fontSize: 16))),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text('Appointment list', style: TextStyle(fontSize: 16)),
+                    vertical20,
+                    details.data!.appointments!.isNotEmpty
+                        ? MediaQuery.removePadding(
+                            context: context,
+                            removeTop: true,
+                            removeBottom: true,
+                            child: Expanded(
+                              child: ListView.builder(
+                                  itemCount: 20,
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    var data = details.data?.appointments
+                                        ?.elementAt(0);
+                                    return Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 10),
+                                      child: appointment_list(
+                                        leading1: '${data?.startTime}',
+                                        leading2: '${data?.endTime}',
+                                        title1: '${data?.title}',
+                                        title2: '${data?.organiser}',
+                                        subtitle: '${data?.address}',
+                                      ),
+                                    );
+                                  }),
+                            ),
+                          )
+                        : Center(
+                            child: Text(
+                              "User does not have any appointment!",
+                              style: txStyle14.copyWith(color: Colors.grey),
+                            ),
+                          )
+                  ],
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Center(
-                  child: Text(
-                    'Chiamaka Odum',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    '@chiamakaodum22',
-                    style: TextStyle(
-                        color: Colors.black.withOpacity(0.5), fontSize: 14),
-                  ),
-                ),
-                vertical20,
-                Center(child: Text('Guest', style: TextStyle(fontSize: 16))),
-                vertical50,
-                Text('Appointment list',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                const SizedBox(
-                  height: 20,
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: appointment_list(
-                    leading1: '2:30PM',
-                    leading2: '3:45PM',
-                    title1: 'Paycaps Project',
-                    title2: 'Rasheed shakesheers',
-                    subtitle: 'Boom HQ 222 Oak Drive, New York',
-                  ),
-                ),
-                appointment_list(
-                  leading1: '2:30PM',
-                  leading2: '3:45PM',
-                  title1: 'Paycaps Project',
-                  title2: 'Rasheed shakesheers',
-                  subtitle: 'Boom HQ 222 Oak Drive, New York',
-                ),
-                appointment_list(
-                  leading1: '2:30PM',
-                  leading2: '3:45PM',
-                  title1: 'Paycaps Project',
-                  title2: 'Rasheed shakesheers',
-                  subtitle: 'Boom HQ 222 Oak Drive, New York',
-                ),
-              ],
+              ),
             ),
           ),
         ],

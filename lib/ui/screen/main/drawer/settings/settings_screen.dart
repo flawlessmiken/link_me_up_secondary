@@ -29,14 +29,20 @@ class SettingScreen extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                InkWell(
-                    onTap: () {
-                      Get.to(DeleteAccount());
-                    },
-                    child: Text('Delete account',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ))),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Get.to(DeleteAccount());
+                        },
+                        child: Text('Delete account',
+                            style: TextStyle(
+                              fontSize: 16,
+                            ))),
+                    Divider()
+                  ],
+                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -47,24 +53,30 @@ class SettingScreen extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                InkWell(
-                  onTap: () {
-                    Get.to(BeepScreen());
-                  },
-                  child: Row(
-                    children: [
-                      Text(
-                        'Beep',
-                        style: TextStyle(fontSize: 16),
+                Column(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Get.to(BeepScreen());
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            'Beep',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          Spacer(),
+                          Text(
+                            'Beep tone 1',
+                            style: TextStyle(
+                                color: Colors.black.withOpacity(0.5),
+                                fontSize: 14),
+                          )
+                        ],
                       ),
-                      Spacer(),
-                      Text(
-                        'Beep tone 1',
-                        style: TextStyle(
-                            color: Colors.black.withOpacity(0.5), fontSize: 14),
-                      )
-                    ],
-                  ),
+                    ),
+                    Divider()
+                  ],
                 ),
                 const SizedBox(
                   height: 10,
@@ -76,14 +88,20 @@ class SettingScreen extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                InkWell(
-                    onTap: () {
-                      Get.to(EntryCriteria());
-                    },
-                    child: Text(
-                      'Entry Criteria',
-                      style: TextStyle(fontSize: 16),
-                    )),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Get.to(EntryCriteria());
+                        },
+                        child: Text(
+                          'Entry Criteria',
+                          style: TextStyle(fontSize: 16),
+                        )),
+                    Divider()
+                  ],
+                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -129,16 +147,21 @@ class _SwitchButtonState extends State<SwitchButton> {
   @override
   Widget build(BuildContext context) {
     bool isSwitched = widget.tap;
-    return SwitchButtonWidget(
-      title: widget.title,
-      // value: isSwitched,
-      onChanged: (value) {
-        setState(() {
-          isSwitched = value;
-        });
-      },
-      // activeTrackColor: Colors.green.shade200,
-      // activeColor: Colors.green.shade600,
+    return Column(
+      children: [
+        SwitchButtonWidget(
+          title: widget.title,
+          // value: isSwitched,
+          onChanged: (value) {
+            setState(() {
+              isSwitched = value;
+            });
+          },
+          // activeTrackColor: Colors.green.shade200,
+          // activeColor: Colors.green.shade600,
+        ),
+        Divider()
+      ],
     );
   }
 }

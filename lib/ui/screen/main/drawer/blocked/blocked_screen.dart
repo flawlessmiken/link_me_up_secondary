@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:link_me_up_secondary/constants/colors.dart';
+import 'package:link_me_up_secondary/ui/mixin/responsive_state/responsive_state.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
 import 'package:link_me_up_secondary/ui/widgets/user_image_icon.dart';
+import 'package:link_me_up_secondary/ui/widgets/utils.dart';
+import 'package:provider/provider.dart';
+import '../../../../../api/core/repositories/user_repository.dart';
 import '../../../../size_config/size_config.dart';
 import '../../../../widgets/app_bar.dart';
 
@@ -9,6 +15,8 @@ class BlockedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProv = Provider.of<UserRepository>(context);
+
     return Scaffold(
       body: Column(
         children: [
@@ -23,34 +31,114 @@ class BlockedScreen extends StatelessWidget {
                   ))
             ],
           ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: MediaQuery.removePadding(
-                context: context,
-                removeTop: true,
-                removeBottom: true,
-                child: ListView.builder(
-                    itemCount: userList.length,
-                    itemBuilder: ((context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: ListTile(
-                          leading: UserImageIcon(
-                            imageUrl: "${userList[index]['image']}",
+          ResponsiveState(
+            state: userProv.state,
+            busyWidget: const Center(
+              child: CircularProgressIndicator(
+                color: appPrimaryColor,
+              ),
+            ),
+            idleWidget: Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: MediaQuery.removePadding(
+                  context: context,
+                  removeTop: true,
+                  removeBottom: true,
+                  child: ListView.builder(
+                      itemCount: userProv.blockedUserModel.data?.length,
+                      itemBuilder: ((context, index) {
+                        var blocked =
+                            userProv.blockedUserModel.data?.elementAt(index);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: InkWell(
+                            onTap: () {
+                              Get.defaultDialog(
+                                title: "Unblock user",
+                                titlePadding: EdgeInsets.only(top: 20),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 20),
+                                backgroundColor: Colors.white,
+                                titleStyle: txStyle20,
+                                barrierDismissible: true,
+                                radius: 6,
+                                content: Column(
+                                  children: [
+                                    Text(
+                                      "Are you sure you want to unblock user?",
+                                      textAlign: TextAlign.center,
+                                      style: txStyle14.copyWith(height: 1.5),
+                                    )
+                                  ],
+                                ),
+                                confirm: InkWell(
+                                  onTap: () async {
+                                    bool u = await userProv
+                                        .unblockAUser(blocked!.id!);
+                                    if (u) {
+                                      userProv.getBlockedUsers();
+                                      Get.close(1);
+                                    }
+                                  },
+                                  child: Container(
+                                    height: 35,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      color: appPrimaryColor,
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Center(
+                                        child: Text(
+                                      "Yes",
+                                      style: txStyle14wt,
+                                    )),
+                                  ),
+                                ),
+                                cancel: InkWell(
+                                  onTap: () {
+                                    Get.back();
+                                  },
+                                  child: Container(
+                                    height: 35,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border:
+                                          Border.all(color: appPrimaryColor),
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Center(
+                                        child: Text(
+                                      "No",
+                                      style: txStyle14,
+                                    )),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: ListTile(
+                              leading: UserImageIcon(
+                                imageUrl: "${blocked?.profilePicture}",
+                              ),
+                              title: Text(
+                                  capitalizeFirstText(
+                                      "${blocked?.firstName} ${blocked?.lastName}"),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  )),
+                              subtitle: Text("@${blocked?.nameTag}",
+                                  style:
+                                      txStyle12.copyWith(color: Colors.grey)),
+                              trailing: Text("${blocked?.type}",
+                                  style:
+                                      txStyle12.copyWith(color: Colors.grey)),
+                            ),
                           ),
-                          title: Text(userList[index]['name'],
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              )),
-                          subtitle: Text(userList[index]['@'],
-                              style: txStyle12.copyWith(color: Colors.grey)),
-                          trailing: Text(userList[index]['role'],
-                              style: txStyle12.copyWith(color: Colors.grey)),
-                        ),
-                      );
-                    })),
+                        );
+                      })),
+                ),
               ),
             ),
           ),
@@ -58,63 +146,4 @@ class BlockedScreen extends StatelessWidget {
       ),
     );
   }
-
-  List userList = [
-    {
-      "name": "Nonso Godfrey",
-      "image":
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrCNcCooHQ5y2Fejefl0ypuGztlKAw6kIcPw&usqp=CAU",
-      "@": "@nonsogodfrey",
-      "role": "Admin",
-      "status": "in",
-    },
-    {
-      "name": "Chiamaka",
-      "image":
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrCNcCooHQ5y2Fejefl0ypuGztlKAw6kIcPw&usqp=CAU",
-      "@": "@lindageorge",
-      "role": "Sub-Admin",
-      "status": "out",
-    },
-    {
-      "name": "Nonso Godfrey",
-      "@": "@nonsogodfrey",
-      "role": "Sub-Admin",
-      "image":
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrCNcCooHQ5y2Fejefl0ypuGztlKAw6kIcPw&usqp=CAU",
-      "status": "out",
-    },
-    {
-      "name": "Theresa Webb",
-      "image":
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrCNcCooHQ5y2Fejefl0ypuGztlKAw6kIcPw&usqp=CAU",
-      "@": "@lindageorge",
-      "role": "Receptionist",
-      "status": "out",
-    },
-    {
-      "name": "Caleb Okeleke",
-      "@": "@lindageorge",
-      "role": "Receptionist",
-      "image":
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrCNcCooHQ5y2Fejefl0ypuGztlKAw6kIcPw&usqp=CAU",
-      "status": "Dismissed",
-    },
-    {
-      "name": "Ronald Richards",
-      "@": "@lindageorge",
-      "role": "sub-Admin",
-      "image":
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrCNcCooHQ5y2Fejefl0ypuGztlKAw6kIcPw&usqp=CAU",
-      "status": "in",
-    },
-    {
-      "name": "Linda George",
-      "@": "@lindageorge",
-      "image":
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrCNcCooHQ5y2Fejefl0ypuGztlKAw6kIcPw&usqp=CAU",
-      "role": "Security",
-      "status": "in",
-    },
-  ];
 }

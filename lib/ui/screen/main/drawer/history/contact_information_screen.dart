@@ -4,13 +4,16 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:link_me_up_secondary/ui/size_config/size_config.dart';
 import 'package:link_me_up_secondary/ui/widgets/app_bar.dart';
+import 'package:link_me_up_secondary/ui/widgets/utils.dart';
 
+import '../../../../../api/core/models/history_details_model.dart';
 import '../../../../styles/text_styles.dart';
 import '../../../../widgets/small_custon_textfield.dart';
 import '../../../../widgets/user_image_icon.dart';
 
 class ContactDetails extends StatefulWidget {
-  const ContactDetails({Key? key}) : super(key: key);
+  final HistoryDetailsModel details;
+  const ContactDetails({Key? key, required this.details}) : super(key: key);
 
   @override
   State<ContactDetails> createState() => _ContactDetailsState();
@@ -36,16 +39,16 @@ class _ContactDetailsState extends State<ContactDetails> {
                         children: [
                           UserImageIcon(
                         imageUrl:
-                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrCNcCooHQ5y2Fejefl0ypuGztlKAw6kIcPw&usqp=CAU",
+                            "${widget.details.data?.profilePicture}",
                         radius: 120,
                       ),
                       vertical10,
                       Text(
-                        "Chiamaka Odum",
+                       capitalizeFirstText( "${widget.details.data?.name}"),
                         style: txStyle16Bold.copyWith(fontSize: 18),
                       ),
                       Text(
-                        "@chiamakaodum22",
+                        "@${widget.details.data?.nameTag}",
                         style: txStyle12.copyWith(color: Colors.grey),
                       ),
                       vertical30,
@@ -56,17 +59,17 @@ class _ContactDetailsState extends State<ContactDetails> {
                     SmallCustomTextField(
                       labelText: 'phone',
                       readOnly: true,
-                      hintText: '+234802 345 6789',
+                      hintText: '${widget.details.data?.personalContact?.phoneNumber}',
                     ),
                     SmallCustomTextField(
                       labelText: 'Email',
                       readOnly: true,
-                      hintText: 'nonsogodfrey@gmail.com',
+                      hintText: '${widget.details.data?.personalContact?.email}',
                     ),
                     SmallCustomTextField(
                       labelText: 'Personal website',
                       readOnly: true,
-                      hintText: 'www.nonsogodfrey.com',
+                      hintText: '${widget.details.data?.personalContact?.website}',
                     ),
                   ],
                 ),
