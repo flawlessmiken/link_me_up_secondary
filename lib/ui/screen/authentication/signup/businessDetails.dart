@@ -8,9 +8,9 @@ import 'package:phone_form_field/phone_form_field.dart';
 
 import 'package:provider/provider.dart';
 
-import '../../../../api/core/repositories/auth_repository.dart';
+import '../../../../api/repositories/auth_repository.dart';
 import '../../../../constants/colors.dart';
-import '../../../mixin/responsive_state/responsive_state.dart';
+import '../../../responsive_state/responsive_state.dart';
 import '../../../styles/text_styles.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_textfield.dart';

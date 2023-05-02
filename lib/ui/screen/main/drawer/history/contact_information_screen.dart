@@ -6,7 +6,7 @@ import 'package:link_me_up_secondary/ui/size_config/size_config.dart';
 import 'package:link_me_up_secondary/ui/widgets/app_bar.dart';
 import 'package:link_me_up_secondary/ui/widgets/utils.dart';
 
-import '../../../../../api/core/models/history_details_model.dart';
+import '../../../../../api/models/history_details_model.dart';
 import '../../../../styles/text_styles.dart';
 import '../../../../widgets/small_custon_textfield.dart';
 import '../../../../widgets/user_image_icon.dart';

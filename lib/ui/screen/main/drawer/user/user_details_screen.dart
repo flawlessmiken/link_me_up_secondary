@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:link_me_up_secondary/constants/colors.dart';
-import 'package:link_me_up_secondary/ui/mixin/responsive_state/responsive_state.dart';
+import 'package:link_me_up_secondary/ui/responsive_state/responsive_state.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/directory/staff_infromation_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/user/edit_user_screen.dart';
+import 'package:link_me_up_secondary/ui/screen/main/drawer/user/user_entry_list.dart';
 import 'package:link_me_up_secondary/ui/size_config/size_config.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
 import 'package:link_me_up_secondary/ui/widgets/custom_button.dart';
@@ -12,7 +13,7 @@ import 'package:link_me_up_secondary/ui/widgets/user_image_icon.dart';
 import 'package:link_me_up_secondary/ui/widgets/utils.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../api/core/repositories/user_repository.dart';
+import '../../../../../api/repositories/user_repository.dart';
 import '../../../../widgets/app_bar.dart';
 
 class UserDetailsScreen extends StatefulWidget {
@@ -72,7 +73,6 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                       readOnly: true,
                     ),
                     vertical10,
-
                     SmallCustomTextField(
                       labelText: "Position",
                       hintText: "${userProv.userDetailsModel.data?.role}",
@@ -83,7 +83,29 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                       children: [
                         Expanded(
                           child: CustomButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              if (userProv.currentUserCategory ==
+                                  userCategoryType.BUSINESS) {
+                                userProv.getGuestEntryList(
+                                    "${userProv.userDetailsModel.data?.id}",
+                                    DateTime.now()
+                                        .subtract(Duration(days: 34))
+                                        .toIso8601String());
+                                userProv.getStaffEntryList(
+                                    "${userProv.userDetailsModel.data?.id}",
+                                    DateTime.now()
+                                        .subtract(Duration(days: 34))
+                                        .toIso8601String());
+                              }
+
+                              Get.to(UserEntryList(
+                                  userImage:
+                                      "${userProv.userDetailsModel.data?.profilePicture}",
+                                  userName:
+                                      "${userProv.userDetailsModel.data?.firstName} ${userProv.userDetailsModel.data?.lastName}",
+                                  userRole:
+                                      "${userProv.userDetailsModel.data?.role}"));
+                            },
                             text: "View entry list",
                             borderColor: appPrimaryColor,
                             textColor: Colors.black,
@@ -98,7 +120,9 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                         Expanded(
                           child: CustomButton(
                             onPressed: () {
-                              Get.to(EditUserScreen(userDetailsModel:userProv.userDetailsModel ,));
+                              Get.to(EditUserScreen(
+                                userDetailsModel: userProv.userDetailsModel,
+                              ));
                             },
                             text: "Edit",
                             borderColor: appPrimaryColor,

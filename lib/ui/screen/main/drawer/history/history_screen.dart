@@ -6,12 +6,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:link_me_up_secondary/constants/colors.dart';
-import 'package:link_me_up_secondary/ui/mixin/responsive_state/responsive_state.dart';
+import 'package:link_me_up_secondary/ui/responsive_state/responsive_state.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/history/history_details_screen.dart';
 import 'package:link_me_up_secondary/ui/widgets/utils.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../api/core/repositories/user_repository.dart';
+import '../../../../../api/repositories/user_repository.dart';
 import '../../../../size_config/size_config.dart';
 import '../../../../styles/text_styles.dart';
 import '../../../../widgets/app_bar.dart';
@@ -56,7 +56,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  padding:  EdgeInsets.symmetric(horizontal: SizeConfig.widthOf(5)),
                   child: Row(children: [
                     Text("${DateFormat('dd').format(DateTime.now())}",
                         style: TextStyle(
@@ -139,7 +139,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                         unselectedLabelColor:
                                             Colors.black.withOpacity(0.5),
                                         tabs: const [
-                                         
                                           Tab(
                                             text: 'Guest',
                                           ),
@@ -152,10 +151,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   ),
                                   const Flexible(
                                       child: TabBarView(
-                                    children: [
-                                      GuestHistory(),
-                                      StaffHistory()
-                                    ],
+                                    children: [GuestHistory(), StaffHistory()],
                                   ))
                                 ],
                               ),
@@ -246,47 +242,60 @@ class _GuestHistoryState extends State<GuestHistory> {
           context: context,
           removeTop: true,
           removeBottom: true,
-          child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: userProv.guestHistory.data?.length,
-              itemBuilder: ((context, index) {
-                var data = userProv.guestHistory.data?.elementAt(index);
-                return InkWell(
-                  onTap: () {
-                    userProv.getGuestHistoryDetails("${data?.id}");
-                    Get.to(HistoryDetailsScreen());
-                  },
-                  child: ListTile(
-                    leading: UserImageIcon(imageUrl: "${data?.profilePicture}"),
-                    title: Text(capitalizeFirstText("${data?.name}"),
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        )),
-                    subtitle: Text('@${data?.nameTag}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                        )),
-                    trailing: Column(
-                      children: [
-                        Text(
-                            DateFormat.MMMMd()
-                                .format(data?.date ?? DateTime.now()),
+          child: userProv.guestHistory.data?.isEmpty ?? true
+              ? Column(
+                  children: [
+                    vertical30,
+                    SvgPicture.asset("assets/svg_icon/empty_entries.svg"),
+                    Text(
+                      "This folder is empty",
+                      style: TextStyle(color: Colors.black, fontSize: 15),
+                    ),
+                  ],
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: userProv.guestHistory.data?.length,
+                  itemBuilder: ((context, index) {
+                    var data = userProv.guestHistory.data?.elementAt(index);
+                    return InkWell(
+                      onTap: () {
+                        userProv.getGuestHistoryDetails("${data?.id}");
+                        Get.to(HistoryDetailsScreen());
+                      },
+                      child: ListTile(
+                        leading:
+                            UserImageIcon(imageUrl: "${data?.profilePicture}"),
+                        title: Text(capitalizeFirstText("${data?.name}"),
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            )),
+                        subtitle: Text('@${data?.nameTag}',
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey,
                             )),
-                        Text('${data?.total}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black,
-                            )),
-                      ],
-                    ),
-                  ),
-                );
-              })),
+                        trailing: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                                DateFormat.MMMMd()
+                                    .format(data?.date ?? DateTime.now()),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                )),
+                            Text('${data?.total}',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                )),
+                          ],
+                        ),
+                      ),
+                    );
+                  })),
         ),
       ),
     );
@@ -318,47 +327,59 @@ class _StaffHistoryState extends State<StaffHistory> {
           context: context,
           removeTop: true,
           removeBottom: true,
-          child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: userProv.staffHistory.data?.length,
-              itemBuilder: ((context, index) {
-                var data = userProv.staffHistory.data?.elementAt(index);
-                return InkWell(
-                  onTap: () {
-                    userProv.getUserHistoryDetails("${data?.id}");
-                    Get.to(HistoryDetailsScreen());
-                  },
-                  child: ListTile(
-                    leading: UserImageIcon(imageUrl: "${data?.profilePicture}"),
-                    title: Text(capitalizeFirstText("${data?.name}"),
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        )),
-                    subtitle: Text('@${data?.nameTag}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                        )),
-                    trailing: Column(
-                      children: [
-                        Text(
-                            DateFormat.MMMMd()
-                                .format(data?.date ?? DateTime.now()),
+          child: userProv.staffHistory.data?.isEmpty ?? true
+              ? Column(
+                  children: [
+                    vertical30,
+                    SvgPicture.asset("assets/svg_icon/empty_entries.svg"),
+                    Text(
+                      "This folder is empty",
+                      style: TextStyle(color: Colors.black, fontSize: 15),
+                    ),
+                  ],
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: userProv.staffHistory.data?.length,
+                  itemBuilder: ((context, index) {
+                    var data = userProv.staffHistory.data?.elementAt(index);
+                    return InkWell(
+                      onTap: () {
+                        userProv.getUserHistoryDetails("${data?.id}");
+                        Get.to(HistoryDetailsScreen());
+                      },
+                      child: ListTile(
+                        leading:
+                            UserImageIcon(imageUrl: "${data?.profilePicture}"),
+                        title: Text(capitalizeFirstText("${data?.name}"),
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            )),
+                        subtitle: Text('@${data?.nameTag}',
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey,
                             )),
-                        Text('${data?.total}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black,
-                            )),
-                      ],
-                    ),
-                  ),
-                );
-              })),
+                        trailing: Column(
+                          children: [
+                            Text(
+                                DateFormat.MMMMd()
+                                    .format(data?.date ?? DateTime.now()),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                )),
+                            Text('${data?.total}',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                )),
+                          ],
+                        ),
+                      ),
+                    );
+                  })),
         ),
       ),
     );

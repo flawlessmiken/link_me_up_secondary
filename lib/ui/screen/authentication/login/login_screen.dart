@@ -4,10 +4,10 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:link_me_up_secondary/api/core/repositories/user_repository.dart';
+import 'package:link_me_up_secondary/api/repositories/user_repository.dart';
 import 'package:link_me_up_secondary/constants/colors.dart';
 import 'package:link_me_up_secondary/constants/route_names.dart';
-import 'package:link_me_up_secondary/ui/mixin/responsive_state/responsive_state.dart';
+import 'package:link_me_up_secondary/ui/responsive_state/responsive_state.dart';
 import 'package:link_me_up_secondary/ui/screen/authentication/forgot_password/forgetPassword_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/main/home_screen.dart';
 import 'package:link_me_up_secondary/ui/size_config/size_config.dart';
@@ -16,7 +16,7 @@ import 'package:link_me_up_secondary/ui/widgets/custom_button.dart';
 import 'package:link_me_up_secondary/ui/widgets/custom_textfield.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../api/core/repositories/auth_repository.dart';
+import '../../../../api/repositories/auth_repository.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -164,6 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   if (res) {
                                     Get.offAll(HomeScreen());
                                     userProv.fetchUserInfo();
+                                    userProv.getSecondaryAccountInfo();
                                   }
                                 },
                                 backgroundColor: appPrimaryColor,

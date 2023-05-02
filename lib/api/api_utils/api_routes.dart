@@ -8,8 +8,9 @@ class ApiRoutes {
   static const String createPin = '$base/api/secondary/user/create-pin';
   static const String resendOTP = '$base/api/secondary/user/resend-otp';
   static const String validOTP = '$base/api/secondary/user/validate-otp';
-  static const String createBusinessProfile =
-      '$base/api/secondary/create-account';
+  static const String createBusinessProfile ='$base/api/secondary/create-account';
+
+ 
   static const String addPictureAndNameTag =
       '$base/api/secondary/account/add-picture';
   static const String fetchUserInfo = '$base/api/secondary/user/info';
@@ -85,4 +86,28 @@ class ApiRoutes {
       '$base/api/secondary/orders/products';
   static const String getProductDetails = '$base/api/secondary/orders/product';
   static const String processPayment = '$base/api/secondary/payment/charge';
+
+  // check in
+  static const String entryCheckin ='$base/api/secondary/entry/checkin';
+  static const String entryCheckout ='$base/api/secondary/entry/checkout';
+  static const String entryDismissed ='$base/api/secondary/entry/dismiss';
+  static const String entryDoorBell ='$base/api/secondary/entry/doorbell';
+  static const String getAllEntries ='$base/api/secondary/entry/today';
+
+
+  //entries
+  static const String guestEntry ='$base/api/secondary/entrylist';
+  static const String staffEntry ='$base/api/secondary/entrylist';
+  static const String studentEntry ='$base/api/secondary/entrylist';
+  static const String residentEntry ='$base/api/secondary/entrylist';
+
+  
+
+
+  // check in
+  static const String getWalletBalance ='$base/api/secondary/wallet/balance';
+  static const String getWalletTransaction ='$base/api/secondary/wallet/transactions';
+
+
+
 }

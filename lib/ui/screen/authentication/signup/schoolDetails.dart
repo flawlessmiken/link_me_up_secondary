@@ -4,13 +4,13 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:link_me_up_secondary/constants/colors.dart';
-import 'package:link_me_up_secondary/ui/mixin/responsive_state/responsive_state.dart';
+import 'package:link_me_up_secondary/ui/responsive_state/responsive_state.dart';
 import 'package:link_me_up_secondary/ui/screen/authentication/signup/profile_picture_screen.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 
 import 'package:provider/provider.dart';
 
-import '../../../../api/core/repositories/auth_repository.dart';
+import '../../../../api/repositories/auth_repository.dart';
 import '../../../styles/text_styles.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_textfield.dart';

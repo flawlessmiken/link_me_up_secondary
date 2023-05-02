@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
-import 'package:link_me_up_secondary/api/core/repositories/user_repository.dart';
+import 'package:link_me_up_secondary/api/repositories/pusher_repository.dart';
+import 'package:link_me_up_secondary/api/repositories/user_repository.dart';
 import 'package:link_me_up_secondary/constants/colors.dart';
-import 'package:link_me_up_secondary/ui/mixin/responsive_state/view_state.dart';
+import 'package:link_me_up_secondary/ui/responsive_state/view_state.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/blocked/blocked_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/clocking/clocking_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/contacts/contact_screen.dart';
@@ -15,6 +16,7 @@ import 'package:link_me_up_secondary/ui/screen/main/drawer/profile/user_profile_
 import 'package:link_me_up_secondary/ui/screen/main/drawer/settings/settings_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/subscription/subscrition_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/user/user_screen.dart';
+import 'package:link_me_up_secondary/ui/screen/main/drawer/wallet/wallet_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/main/notifcation/notifcation_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/start_screen/login_signup_screen.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
@@ -23,10 +25,11 @@ import 'package:link_me_up_secondary/ui/widgets/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../api/core/repositories/auth_repository.dart';
-import '../../mixin/responsive_state/responsive_state.dart';
+import '../../../api/repositories/auth_repository.dart';
+import '../../responsive_state/responsive_state.dart';
 import '../../size_config/size_config.dart';
 import '../../widgets/user_image_icon.dart';
+import 'drawer/user/user_details_screen.dart';
 
 List entreies = [
   {
@@ -92,7 +95,11 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-    // final user = Provider.of<UserRepository>(context, listen: false);
+    Future.delayed(Duration.zero, () {
+      final pusherProv = Provider.of<PusherRepository>(context, listen: false);
+      pusherProv.initPusher();
+    });
+
     // user.userData();
   }
 
@@ -285,7 +292,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         cursorColor: Colors.black)),
               ),
               Divider(
-                color: Colors.black,
+                color: Colors.grey,
               ),
               Expanded(
                 child: ListView.separated(
@@ -297,9 +304,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemCount: 1,
                     itemBuilder: ((context, index) {
                       return Center(
-                          child: Text(
-                        "No entries yet",
-                        style: TextStyle(color: Colors.black, fontSize: 15),
+                          child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          vertical30,
+                          SvgPicture.asset("assets/svg_icon/empty_entries.svg"),
+                          Text(
+                            "No entries yet",
+                            style: TextStyle(color: Colors.black, fontSize: 15),
+                          ),
+                        ],
                       ));
                       // InkWell(
                       //   splashColor: appPrimaryColor,
@@ -381,6 +395,7 @@ class _HomeScreenState extends State<HomeScreen> {
         "title": "Subscription",
         "icon": "assets/svg_icon/Vectorsubscription.svg"
       },
+      {"title": "Wallet", "icon": "assets/svg_icon/wallet.svg"},
       {"title": "Settings", "icon": "assets/svg_icon/settings.svg"},
       {"title": "About us", "icon": "assets/svg_icon/Vectorabout us.svg"},
       {
@@ -400,32 +415,40 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  // ${userData.data.pictureUrl}
-                  UserImageIcon(
-                    imageUrl:
-                        "${userProv.userInfoResponse.data?.profilePicture}",
-                    radius: 50,
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                          capitalizeFirstText(
-                              "${userProv.userInfoResponse.data?.firstName}"
-                              " ${userProv.userInfoResponse.data?.lastName}"),
-                          style: txStyle14wt.copyWith(
-                            fontWeight: FontWeight.w400,
-                          )),
-                      Text("${userProv.userInfoResponse.data?.role}",
-                          style: txStyle12wt),
-                    ],
-                  ),
-                ],
+              child: InkWell(
+                onTap: () {
+                  userProv.getUserDetails(
+                      "${userProv.userInfoResponse.data?.userId}");
+                  Get.to(UserDetailsScreen(
+                      userId: "${userProv.userInfoResponse.data?.userId}"));
+                },
+                child: Row(
+                  children: [
+                    // ${userData.data.pictureUrl}
+                    UserImageIcon(
+                      imageUrl:
+                          "${userProv.userInfoResponse.data?.profilePicture}",
+                      radius: 50,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                            capitalizeFirstText(
+                                "${userProv.userInfoResponse.data?.firstName}"
+                                " ${userProv.userInfoResponse.data?.lastName}"),
+                            style: txStyle14wt.copyWith(
+                              fontWeight: FontWeight.w400,
+                            )),
+                        Text("${userProv.userInfoResponse.data?.role}",
+                            style: txStyle12wt),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(
@@ -503,7 +526,7 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       case 6:
         userProv.getGuestHistory(
-            DateTime.now().subtract(Duration(days: 20)).toIso8601String());
+            DateTime.now().subtract(Duration(days: 37)).toIso8601String());
         userProv.getStaffHistory(
             DateTime.now().subtract(Duration(days: 20)).toIso8601String());
 
@@ -522,6 +545,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
         break;
       case 9:
+        userProv.getWalletTransaction();
+
+        Get.to(WalletScreen());
+        break;
+      case 10:
         Get.to(SettingScreen());
 
         break;

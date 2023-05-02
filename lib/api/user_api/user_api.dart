@@ -1,25 +1,27 @@
-import 'package:link_me_up_secondary/api/core/models/all_product_model.dart';
-import 'package:link_me_up_secondary/api/core/models/all_user_model.dart';
-import 'package:link_me_up_secondary/api/core/models/api_response.dart';
-import 'package:link_me_up_secondary/api/core/models/cart_item_model.dart';
-import 'package:link_me_up_secondary/api/core/models/clock_in_model.dart';
-import 'package:link_me_up_secondary/api/core/models/contact_details_model.dart';
-import 'package:link_me_up_secondary/api/core/models/contact_model.dart';
-import 'package:link_me_up_secondary/api/core/models/directory_details_model.dart';
-import 'package:link_me_up_secondary/api/core/models/directory_model.dart';
-import 'package:link_me_up_secondary/api/core/models/enrolmentRequestModel.dart';
-import 'package:link_me_up_secondary/api/core/models/history_model.dart';
-import 'package:link_me_up_secondary/api/core/models/notificationDetails.dart';
-import 'package:link_me_up_secondary/api/core/models/notification_model.dart';
-import 'package:link_me_up_secondary/api/core/models/product_details_model.dart';
-import 'package:link_me_up_secondary/api/core/models/secondary_account_info.dart';
-import 'package:link_me_up_secondary/api/core/models/successfully_added_user_model.dart';
-import 'package:link_me_up_secondary/api/core/models/user_details_model.dart';
-import 'package:link_me_up_secondary/api/core/models/user_info_response.dart';
-import 'package:link_me_up_secondary/api/core/models/user_roles_model.dart';
+import 'package:link_me_up_secondary/api/models/all_product_model.dart';
+import 'package:link_me_up_secondary/api/models/all_user_model.dart';
+import 'package:link_me_up_secondary/api/models/api_response.dart';
+import 'package:link_me_up_secondary/api/models/cart_model.dart';
+import 'package:link_me_up_secondary/api/models/clock_in_model.dart';
+import 'package:link_me_up_secondary/api/models/contact_details_model.dart';
+import 'package:link_me_up_secondary/api/models/contact_model.dart';
+import 'package:link_me_up_secondary/api/models/directory_details_model.dart';
+import 'package:link_me_up_secondary/api/models/directory_model.dart';
+import 'package:link_me_up_secondary/api/models/enrolmentRequestModel.dart';
+import 'package:link_me_up_secondary/api/models/entry_list_model.dart';
+import 'package:link_me_up_secondary/api/models/history_model.dart';
+import 'package:link_me_up_secondary/api/models/notificationDetails.dart';
+import 'package:link_me_up_secondary/api/models/notification_model.dart';
+import 'package:link_me_up_secondary/api/models/product_details_model.dart';
+import 'package:link_me_up_secondary/api/models/secondary_account_info.dart';
+import 'package:link_me_up_secondary/api/models/successfully_added_user_model.dart';
+import 'package:link_me_up_secondary/api/models/user_details_model.dart';
+import 'package:link_me_up_secondary/api/models/user_info_response.dart';
+import 'package:link_me_up_secondary/api/models/user_roles_model.dart';
+import 'package:link_me_up_secondary/api/models/wallet_transaction_model.dart';
 
-import '../core/models/blocked_user_model.dart';
-import '../core/models/history_details_model.dart';
+import '../models/blocked_user_model.dart';
+import '../models/history_details_model.dart';
 
 abstract class UserApi {
   Future<UserInfoResponse> fetchUserInfo();
@@ -85,9 +87,20 @@ abstract class UserApi {
   Future<AllProductModel> getAllProduct();
   Future<ProductDetailsModel> getProductDetails({String id});
   Future<ApiResponse> processPayment();
-  Future<ApiResponse> addItemToCart({String id, String quantity});
+  Future<ApiResponse> addItemToCart({String id, int quantity,  List users});
   Future<ApiResponse> removeItemFromCart({String id,});
-  Future<CartItemModel> getItemInCart();
+  Future<CartModel> getItemInCart();
+
+  Future<ApiResponse> getWalletBalance();
+  Future<WalletTransactionModel> getWalletTransaction();
+
+
+  Future<EntryListModel> guestEntry({String id, String date});
+  Future<EntryListModel> staffEntry({String id, String date});
+  Future<EntryListModel> studentEntry({String id, String date});
+  Future<EntryListModel> residentEntry({String id, String date});
+
+
 
 
 

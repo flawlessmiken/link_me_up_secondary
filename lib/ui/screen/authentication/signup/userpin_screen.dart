@@ -9,8 +9,8 @@ import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
 
 import 'package:provider/provider.dart';
 
-import '../../../../api/core/repositories/auth_repository.dart';
-import '../../../mixin/responsive_state/responsive_state.dart';
+import '../../../../api/repositories/auth_repository.dart';
+import '../../../responsive_state/responsive_state.dart';
 import '../../../widgets/app_bar.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_textfield.dart';

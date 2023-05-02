@@ -2,40 +2,49 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:link_me_up_secondary/api/core/models/all_user_model.dart';
-import 'package:link_me_up_secondary/api/core/models/blocked_user_model.dart';
-import 'package:link_me_up_secondary/api/core/models/clock_in_model.dart';
-import 'package:link_me_up_secondary/api/core/models/contact_details_model.dart';
-import 'package:link_me_up_secondary/api/core/models/contact_model.dart';
-import 'package:link_me_up_secondary/api/core/models/directory_details_model.dart';
-import 'package:link_me_up_secondary/api/core/models/directory_model.dart';
-import 'package:link_me_up_secondary/api/core/models/enrolmentRequestModel.dart';
-import 'package:link_me_up_secondary/api/core/models/history_details_model.dart';
-import 'package:link_me_up_secondary/api/core/models/history_model.dart';
-import 'package:link_me_up_secondary/api/core/models/notificationDetails.dart';
-import 'package:link_me_up_secondary/api/core/models/notification_model.dart';
-import 'package:link_me_up_secondary/api/core/models/secondary_account_info.dart';
-import 'package:link_me_up_secondary/api/core/models/user_details_model.dart';
-import 'package:link_me_up_secondary/api/core/models/user_info_response.dart';
-import 'package:link_me_up_secondary/api/core/models/user_roles_model.dart';
+import 'package:link_me_up_secondary/api/models/all_user_model.dart';
+import 'package:link_me_up_secondary/api/models/blocked_user_model.dart';
+import 'package:link_me_up_secondary/api/models/cart_model.dart';
+import 'package:link_me_up_secondary/api/models/clock_in_model.dart';
+import 'package:link_me_up_secondary/api/models/contact_details_model.dart';
+import 'package:link_me_up_secondary/api/models/contact_model.dart';
+import 'package:link_me_up_secondary/api/models/directory_details_model.dart';
+import 'package:link_me_up_secondary/api/models/directory_model.dart';
+import 'package:link_me_up_secondary/api/models/enrolmentRequestModel.dart';
+import 'package:link_me_up_secondary/api/models/entry_list_model.dart';
+import 'package:link_me_up_secondary/api/models/history_details_model.dart';
+import 'package:link_me_up_secondary/api/models/history_model.dart';
+import 'package:link_me_up_secondary/api/models/notificationDetails.dart';
+import 'package:link_me_up_secondary/api/models/notification_model.dart';
+import 'package:link_me_up_secondary/api/models/secondary_account_info.dart';
+import 'package:link_me_up_secondary/api/models/user_details_model.dart';
+import 'package:link_me_up_secondary/api/models/user_info_response.dart';
+import 'package:link_me_up_secondary/api/models/user_roles_model.dart';
+import 'package:link_me_up_secondary/api/models/wallet_transaction_model.dart';
 import 'package:link_me_up_secondary/api/user_api/user_api.dart';
 import 'package:link_me_up_secondary/services/local_storage.dart';
-import 'package:link_me_up_secondary/ui/mixin/responsive_state/base_view_model.dart';
-import 'package:link_me_up_secondary/ui/mixin/validators.dart';
+import 'package:link_me_up_secondary/ui/responsive_state/base_view_model.dart';
+import 'package:link_me_up_secondary/api/mixin/validators.dart';
 
 import '../../../locator.dart';
-import '../../../ui/mixin/responsive_state/view_state.dart';
-import '../../api_utils/network_exception.dart';
+import '../../ui/responsive_state/view_state.dart';
+import '../api_utils/network_exception.dart';
 import '../models/all_product_model.dart';
-import '../models/cart_item_model.dart';
 import '../models/product_details_model.dart';
 import '../models/successfully_added_user_model.dart';
+
+enum userCategoryType { BUSINESS, SCHOOL, ESTATE, HOME }
 
 class UserRepository extends BaseNotifier with Validators {
   var userApi = locator<UserApi>();
 
   bool hasNewNotification = false;
   String notificationStatus = "";
+  List selectedItemList = [];
+  List selectedUserList = [];
+
+
+  userCategoryType currentUserCategory = userCategoryType.BUSINESS;
 
   UserInfoResponse userInfoResponse = UserInfoResponse();
   SecondaryAccountInfo secondaryAccountInfo = SecondaryAccountInfo();
@@ -52,9 +61,16 @@ class UserRepository extends BaseNotifier with Validators {
   HistoryModel staffHistory = HistoryModel();
   HistoryModel residentHistory = HistoryModel();
   HistoryModel studentHistory = HistoryModel();
+  // HistoryModel walletBalance = HistoryModel();
+  WalletTransactionModel walletTransaction = WalletTransactionModel();
+
+  EntryListModel guestEntryModel = EntryListModel();
+  EntryListModel staffEntryModel = EntryListModel();
+  EntryListModel residentEntryModel = EntryListModel();
+  EntryListModel studentEntryModel = EntryListModel();
 
   ProductDetailsModel productDetailsModel = ProductDetailsModel();
-  CartItemModel cartItemModel = CartItemModel();
+  CartModel cartItemModel = CartModel();
   AllProductModel allProductModel = AllProductModel();
 
   HistoryDetailsModel guestHistoryDetails = HistoryDetailsModel();
@@ -62,6 +78,35 @@ class UserRepository extends BaseNotifier with Validators {
 
   List<clockIn> clock_in_list = [];
   List<clockIn> clock_out_list = [];
+
+  NotificationDetailsModel notificationDetailsModel =
+      NotificationDetailsModel();
+  EnrolmentRequestModel enrolmentRequestModel = EnrolmentRequestModel();
+
+  DirectoryModel directoryModel = DirectoryModel();
+  DirectoryDetailsModel directoryDetailsModel = DirectoryDetailsModel();
+
+  SuccessfullAddedUserModel successfullAddedUserModel =
+      SuccessfullAddedUserModel();
+
+  setUserCategoryType(String category) {
+    switch (category) {
+      case "business":
+        currentUserCategory = userCategoryType.BUSINESS;
+        break;
+      case "school":
+        currentUserCategory = userCategoryType.SCHOOL;
+        break;
+      case "estate":
+        currentUserCategory = userCategoryType.ESTATE;
+        break;
+      case "home":
+        currentUserCategory = userCategoryType.HOME;
+        break;
+      default:
+    }
+    notifyListeners();
+  }
 
   sortClockInList() {
     clock_in_list.clear();
@@ -75,21 +120,29 @@ class UserRepository extends BaseNotifier with Validators {
     }
   }
 
-  NotificationDetailsModel notificationDetailsModel =
-      NotificationDetailsModel();
-  EnrolmentRequestModel enrolmentRequestModel = EnrolmentRequestModel();
+  addItemToSelectedItem(int index) {
+    if (!selectedItemList.contains(index)) {
+      selectedItemList.insert(0, index);
+    } else {
+      selectedItemList.remove(index);
+    }
+    notifyListeners();
+  }
 
-  DirectoryModel directoryModel = DirectoryModel();
-  DirectoryDetailsModel directoryDetailsModel = DirectoryDetailsModel();
-
-  SuccessfullAddedUserModel successfullAddedUserModel =
-      SuccessfullAddedUserModel();
+  addUserToSelectedUser(int index) {
+    if (!selectedUserList.contains(index)) {
+      selectedUserList.insert(0, index);
+    } else {
+      selectedUserList.remove(index);
+    }
+    notifyListeners();
+  }
 
   Future<bool> fetchUserInfo() async {
     setState(ViewState.Busy);
     try {
       userInfoResponse = await userApi.fetchUserInfo();
-
+      await localStorage.setString("userId", userInfoResponse.data!.userId!);
       setState(ViewState.Idle);
       return true;
     } on NetworkException {
@@ -187,8 +240,9 @@ class UserRepository extends BaseNotifier with Validators {
     setState(ViewState.Busy);
     try {
       userDetailsModel = await userApi.getUserDetails(userId: userId);
-     await localStorage.setString("userId", userDetailsModel.data!.id!);
+
       setState(ViewState.Idle);
+
       return true;
     } on NetworkException {
       displayError(
@@ -362,6 +416,7 @@ class UserRepository extends BaseNotifier with Validators {
     setState(ViewState.Busy);
     try {
       secondaryAccountInfo = await userApi.fetchSecondaryAccount();
+      setUserCategoryType("${secondaryAccountInfo.data?.category}");
       setState(ViewState.Idle);
       return true;
     } on NetworkException {
@@ -638,10 +693,10 @@ class UserRepository extends BaseNotifier with Validators {
     return false;
   }
 
-  Future<bool> addItemCart(String id, String quantity) async {
+  Future<bool> addItemCart(String id, int quantity) async {
     setState(ViewState.Busy);
     try {
-      await userApi.addItemToCart(id: id, quantity: quantity);
+      await userApi.addItemToCart(id: id, quantity: quantity, users: selectedUserList);
       setState(ViewState.Idle);
       return true;
     } on NetworkException {
@@ -706,10 +761,95 @@ class UserRepository extends BaseNotifier with Validators {
     return false;
   }
 
-  Future<bool> removeItemFromCart() async {
+  Future<bool> removeItemFromCart(String id) async {
     setState(ViewState.Busy);
     try {
-      await userApi.removeItemFromCart();
+      await userApi.removeItemFromCart(id: id);
+      setState(ViewState.Idle);
+      return true;
+    } on NetworkException {
+      displayError(
+          error: 'No Internet!',
+          message: 'Please check your internet Connection');
+    } catch (e) {
+      print(e);
+    }
+    setState(ViewState.Idle);
+    return false;
+  }
+
+  Future<bool> getWalletTransaction() async {
+    setState(ViewState.Busy);
+    try {
+      walletTransaction = await userApi.getWalletTransaction();
+      setState(ViewState.Idle);
+      return true;
+    } on NetworkException {
+      displayError(
+          error: 'No Internet!',
+          message: 'Please check your internet Connection');
+    } catch (e) {
+      print(e);
+    }
+    setState(ViewState.Idle);
+    return false;
+  }
+
+  Future<bool> getStaffEntryList(String id, String date) async {
+    setState(ViewState.Busy);
+    try {
+      staffEntryModel = await userApi.staffEntry(id: id, date: date);
+      setState(ViewState.Idle);
+      return true;
+    } on NetworkException {
+      displayError(
+          error: 'No Internet!',
+          message: 'Please check your internet Connection');
+    } catch (e) {
+      print(e);
+    }
+    setState(ViewState.Idle);
+    return false;
+  }
+
+  Future<bool> getResidentEntryList(String id, String date) async {
+    setState(ViewState.Busy);
+    try {
+      residentEntryModel = await userApi.residentEntry(id: id, date: date);
+      setState(ViewState.Idle);
+      return true;
+    } on NetworkException {
+      displayError(
+          error: 'No Internet!',
+          message: 'Please check your internet Connection');
+    } catch (e) {
+      print(e);
+    }
+    setState(ViewState.Idle);
+    return false;
+  }
+
+  Future<bool> getGuestEntryList(String id, String date) async {
+    setState(ViewState.Busy);
+    try {
+      guestEntryModel = await userApi.guestEntry(id: id, date: date);
+      setState(ViewState.Idle);
+      return true;
+    } on NetworkException {
+      displayError(
+          error: 'No Internet!',
+          message: 'Please check your internet Connection');
+    } catch (e) {
+      print(e);
+    }
+    setState(ViewState.Idle);
+    return false;
+  }
+
+  Future<bool> getStudentEntryList(String id, String date) async {
+    setState(ViewState.Busy);
+    try {
+      studentEntryModel = await userApi.studentEntry(id: id, date: date);
       setState(ViewState.Idle);
       return true;
     } on NetworkException {

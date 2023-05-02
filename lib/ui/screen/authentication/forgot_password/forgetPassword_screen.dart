@@ -2,12 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:link_me_up_secondary/constants/colors.dart';
-import 'package:link_me_up_secondary/ui/mixin/responsive_state/responsive_state.dart';
+import 'package:link_me_up_secondary/ui/responsive_state/responsive_state.dart';
 import 'package:link_me_up_secondary/ui/screen/authentication/forgot_password/email_otp_Screen.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../api/core/repositories/auth_repository.dart';
+import '../../../../api/repositories/auth_repository.dart';
 import '../../../size_config/size_config.dart';
 import '../../../widgets/app_bar.dart';
 import '../../../widgets/custom_button.dart';

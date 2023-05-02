@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:link_me_up_secondary/constants/colors.dart';
-import 'package:link_me_up_secondary/ui/mixin/responsive_state/view_state.dart';
+import 'package:link_me_up_secondary/ui/responsive_state/view_state.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/profile/edit_profile.dart';
 import 'package:link_me_up_secondary/ui/widgets/small_custon_textfield.dart';
 import 'package:link_me_up_secondary/ui/widgets/user_image_icon.dart';
@@ -12,8 +12,8 @@ import 'package:pinput/pinput.dart';
 
 import 'package:provider/provider.dart';
 
-import '../../../../../api/core/repositories/user_repository.dart';
-import '../../../../mixin/responsive_state/responsive_state.dart';
+import '../../../../../api/repositories/user_repository.dart';
+import '../../../../responsive_state/responsive_state.dart';
 import '../../../../size_config/size_config.dart';
 import '../../../../styles/text_styles.dart';
 import '../../../../widgets/app_bar.dart';

@@ -4,7 +4,7 @@ import 'package:link_me_up_secondary/constants/colors.dart';
 import 'package:link_me_up_secondary/ui/screen/authentication/signup/schoolDetails.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../api/core/repositories/auth_repository.dart';
+import '../../../../api/repositories/auth_repository.dart';
 import '../../../widgets/app_bar.dart';
 import '../../../widgets/registration_drop_down.dart';
 import 'businessDetails.dart';

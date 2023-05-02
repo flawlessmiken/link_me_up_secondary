@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/route_manager.dart';
 import 'package:link_me_up_secondary/constants/colors.dart';
-import 'package:link_me_up_secondary/ui/mixin/responsive_state/responsive_state.dart';
+import 'package:link_me_up_secondary/ui/responsive_state/responsive_state.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/contacts/contact_details_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/directory/staff_infromation_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/history/contact_information_screen.dart';
@@ -9,7 +10,8 @@ import 'package:link_me_up_secondary/ui/widgets/user_image_icon.dart';
 import 'package:link_me_up_secondary/ui/widgets/utils.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../api/core/repositories/user_repository.dart';
+import '../../../../../api/repositories/user_repository.dart';
+import '../../../../styles/text_styles.dart';
 import '../../../../widgets/app_bar.dart';
 
 class ContactScreen extends StatelessWidget {
@@ -28,7 +30,11 @@ class ContactScreen extends StatelessWidget {
           ),
           ResponsiveState(
             state: userProv.state,
-            busyWidget: Center(child: CircularProgressIndicator(color: appPrimaryColor,),),
+            busyWidget: Center(
+              child: CircularProgressIndicator(
+                color: appPrimaryColor,
+              ),
+            ),
             idleWidget: Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -37,37 +43,53 @@ class ContactScreen extends StatelessWidget {
                       context: context,
                       removeTop: true,
                       removeBottom: true,
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: userProv.contactModel.data?.length ?? 0,
-                          itemBuilder: ((context, index) {
-                            var contact =
-                                userProv.contactModel.data?.elementAt(index);
-                            return InkWell(
-                              onTap: () {
-                                userProv.getContactDetails("${contact?.id}");
-                                Get.to(ContactDetailsScreen(
-                                  id: "${contact?.id}",
-                                ));
-                              },
-                              child: ListTile(
-                                leading: UserImageIcon(
-                                    imageUrl: "${contact?.profilePicture}"),
-                                title: Text(
-                                    capitalizeFirstText(
-                                        "${contact?.firstName} ${contact?.lastName}"),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                    )),
-                                subtitle: Text('@${contact?.nameTag}',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    )),
-                              ),
-                            );
-                          })),
+                      child: userProv.contactModel.data?.isEmpty ?? true
+                          ? Column(
+                              children: [
+                                vertical30,
+                                SvgPicture.asset(
+                                    "assets/svg_icon/empty_contact.svg"),
+                                vertical30,
+                                Text(
+                                  "You don't have any contacts yet",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 15),
+                                ),
+                              ],
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              itemCount:
+                                  userProv.contactModel.data?.length ?? 0,
+                              itemBuilder: ((context, index) {
+                                var contact = userProv.contactModel.data
+                                    ?.elementAt(index);
+                                return InkWell(
+                                  onTap: () {
+                                    userProv
+                                        .getContactDetails("${contact?.id}");
+                                    Get.to(ContactDetailsScreen(
+                                      id: "${contact?.id}",
+                                    ));
+                                  },
+                                  child: ListTile(
+                                    leading: UserImageIcon(
+                                        imageUrl: "${contact?.profilePicture}"),
+                                    title: Text(
+                                        capitalizeFirstText(
+                                            "${contact?.firstName} ${contact?.lastName}"),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                        )),
+                                    subtitle: Text('@${contact?.nameTag}',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                        )),
+                                  ),
+                                );
+                              })),
                     ),
                   ],
                 ),

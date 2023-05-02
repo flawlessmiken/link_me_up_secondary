@@ -4,12 +4,12 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:link_me_up_secondary/api/api_utils/api_helper.dart';
 import 'package:link_me_up_secondary/api/authentication_api/authentication_api.dart';
-import 'package:link_me_up_secondary/api/core/models/api_response.dart';
-import 'package:link_me_up_secondary/api/core/models/complete_profile_response.dart';
-import 'package:link_me_up_secondary/api/core/models/create_admin_profile_response.dart';
-import 'package:link_me_up_secondary/api/core/models/create_business_profile_response.dart';
-import 'package:link_me_up_secondary/api/core/models/forgot_password_validate_OTP.dart';
-import 'package:link_me_up_secondary/api/core/models/login_model.dart';
+import 'package:link_me_up_secondary/api/models/api_response.dart';
+import 'package:link_me_up_secondary/api/models/complete_profile_response.dart';
+import 'package:link_me_up_secondary/api/models/create_admin_profile_response.dart';
+import 'package:link_me_up_secondary/api/models/create_business_profile_response.dart';
+import 'package:link_me_up_secondary/api/models/forgot_password_validate_OTP.dart';
+import 'package:link_me_up_secondary/api/models/login_model.dart';
 import 'package:link_me_up_secondary/locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

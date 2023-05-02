@@ -4,7 +4,8 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:link_me_up_secondary/constants/colors.dart';
-import 'package:link_me_up_secondary/ui/mixin/responsive_state/responsive_state.dart';
+import 'package:link_me_up_secondary/ui/responsive_state/responsive_state.dart';
+import 'package:link_me_up_secondary/ui/screen/main/drawer/order/cart_screen.dart';
 
 import 'package:link_me_up_secondary/ui/screen/main/drawer/order/product_details_screen.dart';
 import 'package:link_me_up_secondary/ui/size_config/size_config.dart';
@@ -12,7 +13,7 @@ import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
 import 'package:link_me_up_secondary/ui/widgets/utils.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../api/core/repositories/user_repository.dart';
+import '../../../../../api/repositories/user_repository.dart';
 import '../../../../widgets/app_bar.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -33,11 +34,19 @@ class _OrderScreenState extends State<OrderScreen> {
         title: 'Order',
         actions: [
           IconButton(
-              onPressed: () {}, icon: Icon(Icons.shopping_cart_checkout)),
+              onPressed: () {
+                userProv.getCartItem();
+                Get.to(
+                  CartScreen(),
+                  transition: Transition.rightToLeft,
+                  );
+              },
+              icon: Icon(Icons.shopping_cart_checkout)),
         ],
       ),
       Padding(
-        padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthOf(5), vertical: 10),
+        padding: EdgeInsets.symmetric(
+            horizontal: SizeConfig.widthOf(5), vertical: 10),
         child: ResponsiveState(
           state: userProv.state,
           busyWidget: Center(

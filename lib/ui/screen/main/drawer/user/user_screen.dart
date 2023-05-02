@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/route_manager.dart';
 import 'package:link_me_up_secondary/constants/colors.dart';
-import 'package:link_me_up_secondary/ui/mixin/responsive_state/responsive_state.dart';
+import 'package:link_me_up_secondary/ui/responsive_state/responsive_state.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/directory/staff_infromation_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/user/add_new_user_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/user/user_details_screen.dart';
@@ -9,7 +10,8 @@ import 'package:link_me_up_secondary/ui/widgets/user_image_icon.dart';
 import 'package:link_me_up_secondary/ui/widgets/utils.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../api/core/repositories/user_repository.dart';
+import '../../../../../api/repositories/user_repository.dart';
+import '../../../../styles/text_styles.dart';
 import '../../../../widgets/app_bar.dart';
 
 class UserScreen extends StatefulWidget {
@@ -65,51 +67,66 @@ class _UserScreenState extends State<UserScreen> {
                       context: context,
                       removeTop: true,
                       removeBottom: true,
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: userProv.allUserModel.data?.length,
-                          itemBuilder: ((context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: InkWell(
-                                onTap: () {
-                                  userProv.getUserDetails(userProv
-                                      .allUserModel.data!
-                                      .elementAt(index)
-                                      .id!);
-                                  Get.to(UserDetailsScreen(
-                                    userId: userProv.allUserModel.data!
-                                        .elementAt(index)
-                                        .id!,
-                                  ));
-                                },
-                                child: ListTile(
-                                  leading: UserImageIcon(
-                                      imageUrl:
-                                          "${userProv.allUserModel.data?.elementAt(index).profilePicture}"),
-                                  title: Text(
-                                      capitalizeFirstText(
-                                          "${userProv.allUserModel.data?.elementAt(index).firstName}"
-                                          " ${userProv.allUserModel.data?.elementAt(index).lastName}"),
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                      )),
-                                  // subtitle: Text('@NonsoGodfrey',
-                                  //     style: TextStyle(
-                                  //       fontSize: 12,
-                                  //       color: Colors.grey,
-                                  //     )),
-                                  trailing: Text(
-                                      "${userProv.allUserModel.data?.elementAt(index).role}",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey,
-                                      )),
+                      child: userProv.allUserModel.data?.isEmpty ?? true
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                vertical30,
+                                SvgPicture.asset(
+                                    "assets/svg_icon/empty_contact.svg"),
+                                Text(
+                                  "You are yet to add a user",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 15),
                                 ),
-                              ),
-                            );
-                          })),
+                              ],
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: userProv.allUserModel.data?.length,
+                              itemBuilder: ((context, index) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  child: InkWell(
+                                    onTap: () {
+                                      userProv.getUserDetails(userProv
+                                          .allUserModel.data!
+                                          .elementAt(index)
+                                          .id!);
+                                      Get.to(UserDetailsScreen(
+                                        userId: userProv.allUserModel.data!
+                                            .elementAt(index)
+                                            .id!,
+                                      ));
+                                    },
+                                    child: ListTile(
+                                      leading: UserImageIcon(
+                                          imageUrl:
+                                              "${userProv.allUserModel.data?.elementAt(index).profilePicture}"),
+                                      title: Text(
+                                          capitalizeFirstText(
+                                              "${userProv.allUserModel.data?.elementAt(index).firstName}"
+                                              " ${userProv.allUserModel.data?.elementAt(index).lastName}"),
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                          )),
+                                      // subtitle: Text('@NonsoGodfrey',
+                                      //     style: TextStyle(
+                                      //       fontSize: 12,
+                                      //       color: Colors.grey,
+                                      //     )),
+                                      trailing: Text(
+                                          "${userProv.allUserModel.data?.elementAt(index).role}",
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey,
+                                          )),
+                                    ),
+                                  ),
+                                );
+                              })),
                     ),
                   ],
                 ),

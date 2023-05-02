@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import '../core/models/api_response.dart';
+import '../models/api_response.dart';
 import 'network_exception.dart';
 import 'package:http/http.dart' as api;
 

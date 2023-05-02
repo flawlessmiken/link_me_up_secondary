@@ -3,7 +3,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:link_me_up_secondary/ui/mixin/responsive_state/responsive_state.dart';
+import 'package:link_me_up_secondary/ui/responsive_state/responsive_state.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/history/appointment_list.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/history/contact_information_screen.dart';
 import 'package:link_me_up_secondary/ui/screen/main/drawer/history/entry_details_screen.dart';
@@ -14,7 +14,7 @@ import 'package:link_me_up_secondary/ui/widgets/user_image_icon.dart';
 import 'package:link_me_up_secondary/ui/widgets/utils.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../api/core/repositories/user_repository.dart';
+import '../../../../../api/repositories/user_repository.dart';
 import '../../../../../constants/colors.dart';
 
 class HistoryDetailsScreen extends StatefulWidget {

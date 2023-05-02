@@ -4,13 +4,13 @@ import 'package:link_me_up_secondary/constants/colors.dart';
 import 'package:link_me_up_secondary/ui/screen/authentication/forgot_password/reset_password.dart';
 import 'package:link_me_up_secondary/ui/screen/authentication/forgot_password/validate_pin_screen.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
-import '../../../../api/core/repositories/auth_repository.dart';
+import '../../../../api/repositories/auth_repository.dart';
 import '../../../../constants/route_names.dart';
 
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
-import '../../../mixin/responsive_state/responsive_state.dart';
+import '../../../responsive_state/responsive_state.dart';
 import '../../../size_config/size_config.dart';
 import '../../../widgets/app_bar.dart';
 import '../../../widgets/custom_button.dart';

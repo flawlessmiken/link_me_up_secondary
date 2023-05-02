@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:link_me_up_secondary/ui/screen/main/home_screen.dart';
 import 'package:link_me_up_secondary/ui/widgets/user_image_icon.dart';
+import 'package:link_me_up_secondary/ui/widgets/utils.dart';
 
-import '../../../../api/core/repositories/auth_repository.dart';
+import '../../../../api/repositories/auth_repository.dart';
 import '../../../size_config/size_config.dart';
 import 'package:provider/provider.dart';
 
@@ -48,18 +49,18 @@ class _CompletionScreenState extends State<CompletionScreen> {
                       height: 10,
                     ),
                     Text(
-                      '${authProv.completeProfileResponse.data?.name}',
+                      capitalizeFirstText('${authProv.completeProfileResponse.data?.name}'),
                       style: Theme.of(context).primaryTextTheme.headline3,
                     ),
                     Text(
-                      '${authProv.completeProfileResponse.data?.nameTag}',
+                      '@${authProv.completeProfileResponse.data?.nameTag}',
                       style: Theme.of(context).primaryTextTheme.subtitle2,
                     ),
                     SizedBox(
                       height: SizeConfig.heightOf(8),
                     ),
                     Text(
-                      '${authProv.completeProfileResponse.data?.name} 👋',
+                      capitalizeFirstText('${authProv.completeProfileResponse.data?.name} 👋'),
                       style: Theme.of(context).primaryTextTheme.headline3,
                     ),
                     const SizedBox(

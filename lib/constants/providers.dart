@@ -1,9 +1,10 @@
-import 'package:link_me_up_secondary/api/core/repositories/pusher_repository.dart';
-import 'package:link_me_up_secondary/api/core/repositories/user_repository.dart';
+
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
-import '../api/core/repositories/auth_repository.dart';
+import '../api/repositories/auth_repository.dart';
+import '../api/repositories/pusher_repository.dart';
+import '../api/repositories/user_repository.dart';
 import '../home_viewmodel.dart';
 
 class AppProviders {

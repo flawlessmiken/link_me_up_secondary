@@ -1,9 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:link_me_up_secondary/ui/styles/text_styles.dart';
 import 'package:link_me_up_secondary/ui/widgets/utils.dart';
 
-import '../../../../../api/core/models/history_details_model.dart';
+import '../../../../../api/models/history_details_model.dart';
 import '../../../../size_config/size_config.dart';
 import '../../../../widgets/app_bar.dart';
 import '../../../../widgets/user_image_icon.dart';
@@ -92,11 +93,18 @@ class AppointmentList extends StatelessWidget {
                             ),
                           )
                         : Center(
-                            child: Text(
-                              "User does not have any appointment!",
-                              style: txStyle14.copyWith(color: Colors.grey),
-                            ),
-                          )
+                            child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              vertical30,
+                              SvgPicture.asset(
+                                  "assets/svg_icon/empty_entries.svg"),
+                              Text(
+                                "User does not have any appointment!",
+                                style: txStyle14.copyWith(color: Colors.grey),
+                              ),
+                            ],
+                          ))
                   ],
                 ),
               ),

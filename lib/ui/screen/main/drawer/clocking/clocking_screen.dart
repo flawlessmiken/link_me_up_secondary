@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:link_me_up_secondary/constants/colors.dart';
-import 'package:link_me_up_secondary/ui/mixin/responsive_state/responsive_state.dart';
+import 'package:link_me_up_secondary/ui/responsive_state/responsive_state.dart';
 import 'package:link_me_up_secondary/ui/widgets/utils.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../api/core/repositories/user_repository.dart';
+import '../../../../../api/repositories/user_repository.dart';
 import '../../../../size_config/size_config.dart';
 import '../../../../styles/text_styles.dart';
 import '../../../../widgets/app_bar.dart';
@@ -155,41 +156,52 @@ class ClockInList extends StatelessWidget {
           context: context,
           removeTop: true,
           removeBottom: true,
-          child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: userProv.clock_in_list.length,
-              itemBuilder: ((context, index) {
-                var data = userProv.clock_in_list.elementAt(index);
-                return Column(
+          child: userProv.clock_in_list.isEmpty
+              ? Column(
                   children: [
-                    InkWell(
-                      onTap: () {
-                        // Get.to(HistoryDetailsScreen());
-                      },
-                      child: ListTile(
-                        leading:
-                            UserImageIcon(imageUrl: "${data.profilePicture}"),
-                        title: Text(capitalizeFirstText("${data.name}"),
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            )),
-                        subtitle: Text('@${data.nameTag}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            )),
-                        trailing: Text('${data.time}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            )),
-                      ),
+                    vertical30,
+                    SvgPicture.asset("assets/svg_icon/empty_entries.svg"),
+                    Text(
+                      "No entries for today",
+                      style: TextStyle(color: Colors.black, fontSize: 15),
                     ),
-                    vertical10
                   ],
-                );
-              })),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: userProv.clock_in_list.length,
+                  itemBuilder: ((context, index) {
+                    var data = userProv.clock_in_list.elementAt(index);
+                    return Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            // Get.to(HistoryDetailsScreen());
+                          },
+                          child: ListTile(
+                            leading: UserImageIcon(
+                                imageUrl: "${data.profilePicture}"),
+                            title: Text(capitalizeFirstText("${data.name}"),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                )),
+                            subtitle: Text('@${data.nameTag}',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                )),
+                            trailing: Text('${data.time}',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                )),
+                          ),
+                        ),
+                        vertical10
+                      ],
+                    );
+                  })),
         ),
       ),
     );
@@ -218,41 +230,52 @@ class ClockOutList extends StatelessWidget {
           context: context,
           removeTop: true,
           removeBottom: true,
-          child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: userProv.clock_out_list.length,
-              itemBuilder: ((context, index) {
-                var data = userProv.clock_out_list.elementAt(index);
-                return Column(
+          child: userProv.clock_out_list.isEmpty
+              ? Column(
                   children: [
-                    InkWell(
-                      onTap: () {
-                        // Get.to(HistoryDetailsScreen());
-                      },
-                      child: ListTile(
-                        leading:
-                            UserImageIcon(imageUrl: "${data.profilePicture}"),
-                        title: Text(capitalizeFirstText("${data.name}"),
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            )),
-                        subtitle: Text('@${data.nameTag}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            )),
-                        trailing: Text('${data.time}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            )),
-                      ),
+                    vertical30,
+                    SvgPicture.asset("assets/svg_icon/empty_entries.svg"),
+                    Text(
+                      "No entries for today",
+                      style: TextStyle(color: Colors.black, fontSize: 15),
                     ),
-                    vertical10,
                   ],
-                );
-              })),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: userProv.clock_out_list.length,
+                  itemBuilder: ((context, index) {
+                    var data = userProv.clock_out_list.elementAt(index);
+                    return Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            // Get.to(HistoryDetailsScreen());
+                          },
+                          child: ListTile(
+                            leading: UserImageIcon(
+                                imageUrl: "${data.profilePicture}"),
+                            title: Text(capitalizeFirstText("${data.name}"),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                )),
+                            subtitle: Text('@${data.nameTag}',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                )),
+                            trailing: Text('${data.time}',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                )),
+                          ),
+                        ),
+                        vertical10,
+                      ],
+                    );
+                  })),
         ),
       ),
     );

@@ -1,11 +1,13 @@
-import 'package:link_me_up_secondary/api/core/models/api_response.dart';
-import 'package:link_me_up_secondary/api/core/models/complete_profile_response.dart';
-import 'package:link_me_up_secondary/api/core/models/create_admin_profile_response.dart';
-import 'package:link_me_up_secondary/api/core/models/create_business_profile_response.dart';
+
 import 'package:link_me_up_secondary/ui/screen/main/drawer/settings/change_password_screen.dart';
 
-import '../core/models/forgot_password_validate_OTP.dart';
-import '../core/models/login_model.dart';
+import '../models/api_response.dart';
+import '../models/complete_profile_response.dart';
+import '../models/create_admin_profile_response.dart';
+import '../models/create_business_profile_response.dart';
+import '../models/forgot_password_validate_OTP.dart';
+import '../models/login_model.dart';
+
 
 abstract class AUthenticationApi {
   Future<CreateAdminProfileResponse> createAdminProfile({

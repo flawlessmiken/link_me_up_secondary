@@ -32,6 +32,16 @@ class Validators {
     return null;
   }
 
+  String? validateAmount(String value) {
+    if (value.length < 3) {
+      return 'Amount too small';
+    }
+    if (value.length > 10) {
+      return 'Amount too large';
+    }
+    return null;
+  }
+
   String? validateComment(String value) {
     if (value.isEmpty) return "Invalid comment";
 

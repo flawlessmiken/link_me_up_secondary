@@ -8,9 +8,9 @@ import 'package:link_me_up_secondary/ui/widgets/small_custon_textfield.dart';
 import 'package:link_me_up_secondary/ui/widgets/utils.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../api/core/repositories/user_repository.dart';
+import '../../../../../api/repositories/user_repository.dart';
 import '../../../../../constants/colors.dart';
-import '../../../../mixin/responsive_state/responsive_state.dart';
+import '../../../../responsive_state/responsive_state.dart';
 import '../../../../size_config/size_config.dart';
 import '../../../../widgets/app_bar.dart';
 import '../../../../widgets/user_image_icon.dart';

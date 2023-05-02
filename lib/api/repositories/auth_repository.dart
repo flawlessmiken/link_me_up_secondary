@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:link_me_up_secondary/api/core/models/complete_profile_response.dart';
-import 'package:link_me_up_secondary/api/core/models/create_admin_profile_response.dart';
-import 'package:link_me_up_secondary/api/core/models/country_model.dart';
-import 'package:link_me_up_secondary/api/core/models/create_business_profile_response.dart';
-import 'package:link_me_up_secondary/api/core/models/login_model.dart';
-import 'package:link_me_up_secondary/ui/mixin/responsive_state/base_view_model.dart';
+import 'package:link_me_up_secondary/api/models/complete_profile_response.dart';
+import 'package:link_me_up_secondary/api/models/create_admin_profile_response.dart';
+import 'package:link_me_up_secondary/api/models/country_model.dart';
+import 'package:link_me_up_secondary/api/models/create_business_profile_response.dart';
+import 'package:link_me_up_secondary/api/models/login_model.dart';
+import 'package:link_me_up_secondary/ui/responsive_state/base_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../locator.dart';
-import '../../../ui/mixin/responsive_state/view_state.dart';
-import '../../../ui/mixin/validators.dart';
-import '../../api_utils/network_exception.dart';
-import '../../authentication_api/authentication_api.dart';
+import '../../ui/responsive_state/view_state.dart';
+import '../mixin/validators.dart';
+import '../api_utils/network_exception.dart';
+import '../authentication_api/authentication_api.dart';
 import '../infastructure/countries_parser.dart';
 import '../models/forgot_password_validate_OTP.dart';
 

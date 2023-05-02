@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:link_me_up_secondary/ui/mixin/responsive_state/view_state.dart';
+import 'package:link_me_up_secondary/ui/responsive_state/view_state.dart';
 
 
 /// Class for view models to extend from. Keeps track
